@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:WaterMyPlants.UI.ViewModels"
+             xmlns:models="clr-namespace:WaterMyPlants.UI.Models"
+             x:Class="WaterMyPlants.UI.Views.PlantDetailsPage"
+             x:DataType="vm:PlantDetailsViewModel"
+             Title="Szczegóły rośliny">
+
+    <Grid>
+        <ScrollView>
+
+            <VerticalStackLayout Padding="20" Spacing="15">
+                <Label Text="{Binding Name}"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" />
+                <Label Text="{Binding Localization}"
+               FontSize="18"
+               HorizontalOptions="Center" />
+                <Label Text="{Binding Description}"
+               FontSize="18" />
+                <Label Text="{Binding CreatedAt, StringFormat='Data dodania: {0:dd.MM.yyyy}'}"
+               FontSize="14" />
+                <Label Text="{Binding LastWaterAt, StringFormat='Ostatnie podlewanie: {0:dd.MM.yyyy}'}"
+               FontSize="14" />
+                <Label Text="{Binding NextWaterAt, StringFormat='Podlej w: {0:dd.MM.yyyy}'}"
+               FontSize="14" />
+                <Label Text="Notatki:" FontSize="18" />
+
+                <CollectionView ItemsSource="{Binding Notes}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:NoteModel">
+                            <Frame BorderColor="LightGray" Padding="10" Margin="0,5">
+                                <Grid ColumnDefinitions="auto, *">
+                                    <Label Text="{Binding LastSave}" FontSize="14"/>
+                                    <Label Text="{Binding Text}" FontSize="14" Grid.Column="1"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Label Text="Zdjęcia:" FontSize="18" />
+
+                <CollectionView ItemsSource="{Binding Photos}"/>
+
+
+
+            </VerticalStackLayout>
+
+
+        </ScrollView>
+
+        <Button Text="+"
+                WidthRequest="60"
+                HeightRequest="60"
+                CornerRadius="30"
+                BackgroundColor="#66BB6A"
+                TextColor="White"
+                FontSize="32"
+                VerticalOptions="End"
+                HorizontalOptions="End"
+                Margin="20"
+                Command="{Binding ShowActionsCommand}">
+            <Button.Shadow>
+                <Shadow Brush="Black"
+                        Opacity="0.25"
+                        Offset="3,3"
+                        Radius="8" />
+            </Button.Shadow>
+        </Button>
+    </Grid>
+</ContentPage>
