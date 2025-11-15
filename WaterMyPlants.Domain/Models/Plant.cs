@@ -2,11 +2,11 @@
 
 public class Plant : UpdatableEntity
 {
-    public string Name { get; private set; }
-    public string? Localization { get; private set; }
-    public string? Description { get; private set; }
-    public int WaterIntervalDays { get; private set; }
-    public DateTime? LastWaterAt { get; private set; }
+    public string Name { get; set; }
+    public string? Localization { get; set; }
+    public string? Description { get; set; }
+    public int WaterIntervalDays { get; set; }
+    public DateTime? LastWaterAt { get; set; }
 
     private readonly List<Note> _notes = new();
     public IReadOnlyCollection<Note> Notes => _notes.AsReadOnly();
@@ -26,14 +26,20 @@ public class Plant : UpdatableEntity
 
     public void CreateNew()
     {
-        Id = Guid.NewGuid();
+        Id = Guid.NewGuid().ToString();
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void CreateNotes(List<Note> notes)
+    public void CreateNotes(IEnumerable<Note> notes)
+    {
+        _notes.Clear();
+        _notes.AddRange(notes);
+    }
+
+    public void CreatePhotos(IEnumerable<Photo> photos)
     {
         _photos.Clear();
-        notes.AddRange(notes);  
+        _photos.AddRange(photos);
     }
 
     public Plant(string name, int waterIntervalDays, string? localization = null, string? description = null)

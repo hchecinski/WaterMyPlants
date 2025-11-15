@@ -7,7 +7,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddSingleton<IPlantService, PlantServiceFake>();
+        services.AddSingleton<IPlantService, PlantService>();
+        services.AddSingleton<IMapper, Mapper>();
 
         return services;
     }

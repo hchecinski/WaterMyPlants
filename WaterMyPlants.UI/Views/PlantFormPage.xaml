@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:WaterMyPlants.UI.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="WaterMyPlants.UI.Views.PlantFormPage"
+             x:DataType="vm:PlantFormViewModel"
+             Title="Nowa roślinka">
+    
+    <Grid RowDefinitions="*, Auto" Padding="20">
+        
+        <ScrollView>
+            <VerticalStackLayout>
+                <Entry Placeholder="Nazwa rośliny" Text="{Binding Name}" />
+                <Entry Placeholder="Lokalizacja" Text="{Binding Localization}" />
+                <Entry Placeholder="Co ile dni podlewać" Text="{Binding WaterIntervalDays}" Keyboard="Numeric">
+                    <Entry.Behaviors>
+                        <toolkit:NumericValidationBehavior MaximumValue="365" MinimumValue="1"
+                                                       MinimumDecimalPlaces="0" MaximumDecimalPlaces="0"/>
+                    </Entry.Behaviors>
+                </Entry>
+                <Editor Placeholder="Opis rośliny" Text="{Binding Description}" AutoSize="TextChanges" HeightRequest="100"/>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Button Grid.Row="1" Text="Dodaj" Command="{Binding AddCommand}" />
+    </Grid>
+</ContentPage>

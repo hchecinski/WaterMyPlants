@@ -4,7 +4,7 @@ namespace WaterMyPlants.Application.Services;
 
 public interface IPlantService
 {
-    Task<Guid> AddAsync(PlantDto plant);
+    Task<Guid> AddAsync(CreatePlantDto createPlantDto);
     Task UpdateAsync(PlantDto plant);
     Task DeleteAsync(Guid id);
     Task WaterNowAsync(Guid id, DateTime nowUtc);

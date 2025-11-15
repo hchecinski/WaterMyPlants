@@ -1,10 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using WaterMyPlants.Application.Services;
 using WaterMyPlants.UI.Factories;
-using WaterMyPlants.UI.Models;
 using WaterMyPlants.UI.Services;
+using IMapper = WaterMyPlants.UI.Services.IMapper;
 
 namespace WaterMyPlants.UI.ViewModels;
 
@@ -13,15 +14,17 @@ public partial class MainViewModel : ObservableObject
     private readonly IPlantService _plantService;
     private readonly IMapper _mapper;
     private readonly IPlantViewModelFactory _factory;
+    private readonly INavigationService _navigator;
 
     [ObservableProperty]
     ObservableCollection<PlantListItemViewModel> _plants = new();
 
-    public MainViewModel(IPlantService plantService, IMapper mapper, IPlantViewModelFactory plantViewModelFactory)
+    public MainViewModel(IPlantService plantService, IMapper mapper, IPlantViewModelFactory plantViewModelFactory, INavigationService navigationService)
     {
         _plantService = plantService;
         _mapper = mapper;
         _factory = plantViewModelFactory;
+        _navigator = navigationService;
     }
 
     public async Task OnAppearing()
@@ -59,5 +62,11 @@ public partial class MainViewModel : ObservableObject
                 Plants.Add(item);
             }
         });
+    }
+
+    [RelayCommand]
+    private async Task AddPlant()
+    {
+        await _navigator.NavigateToPlantFormPage();
     }
 }

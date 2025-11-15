@@ -22,43 +22,29 @@ public class PlantRepository : IPlantRepository
         {
             using var conn = _factory.Create();
 
-            const string sql = """
-                SELECT 
-                    p.Id, p.Name, p.Localization, p.Description,
-                    p.WaterIntervalDays, p.CreatedAt, p.LastWaterAt, p.LastUpdatedAt,
-                    n.Id, n.PlantId, n.Text, n.CreatedAt
-                FROM Plants p
-                LEFT JOIN Notes n ON n.PlantId = p.Id
-                LEFT JOIN Photos ph ON ph.PlantId = p.Id
-                ORDER BY p.CreatedAt;
-            """;
+            const string sqlPlant = "SELECT * FROM Plants;";
+            const string sqlNotes = "SELECT * FROM Notes;";
+            const string sqlPhotos = "SELECT * FROM Photos;";
 
-            var plantDictionary = new Dictionary<Guid, Plant>();
+            var plants = await conn.QueryAsync<Plant>(sqlPlant);
+            if (plants is null || !plants.Any())
+            {
+                return Enumerable.Empty<Plant>();
+            }
 
-            await conn.QueryAsync<Plant, Note, Photo, Plant>(
-                sql,
-                (plant, note, photo) =>
-                {
-                    if (!plantDictionary.TryGetValue(plant.Id, out var existing))
-                    {
-                        existing = plant;
-                        plantDictionary.Add(existing.Id, existing);
-                    }
+            var notes = await conn.QueryAsync<Note>(sqlNotes);
+            var photos = await conn.QueryAsync<Photo>(sqlPhotos);
 
-                    if (note != null)
-                    {
-                        existing.AddNote(note);
-                    }
+            foreach (var plant in plants)
+            {
+                var plantNotes = notes.Where(n => n.PlantId.ToString() == plant.Id).ToList();
+                plant.CreateNotes(plantNotes);
 
-                    if(photo != null)
-                    {
-                        existing.AddPhoto(photo);
-                    }
-                    return existing;
-                }
-            );
+                var plantPhotos = photos.Where(p => p.PlantId.ToString() == plant.Id).ToList();
+                plant.CreatePhotos(plantPhotos);
+            }
 
-            return plantDictionary.Values;
+            return plants;
         }
         catch (Exception ex)
         {
@@ -77,9 +63,11 @@ public class PlantRepository : IPlantRepository
                 SELECT * FROM Plants WHERE Id = @Id;
 
                 SELECT * FROM Notes WHERE PlantId = @Id ORDER BY CreatedAt;
+
+                SELECT * FROM Photos WHERE PlantId = @Id ORDER BY CreatedAt;
             """;
 
-            using var multi = await conn.QueryMultipleAsync(sql, new { Id = id });
+            using var multi = await conn.QueryMultipleAsync(sql, new { Id = id.ToString() });
 
             var plant = await multi.ReadSingleOrDefaultAsync<Plant>();
             if (plant is null)
@@ -89,6 +77,9 @@ public class PlantRepository : IPlantRepository
 
             var notes = (await multi.ReadAsync<Note>()).ToList();
             plant.CreateNotes(notes);
+
+            var photos = (await multi.ReadAsync<Photo>()).ToList();
+            plant.CreatePhotos(photos);
 
             return plant;
         }
@@ -105,12 +96,28 @@ public class PlantRepository : IPlantRepository
         {
             using var conn = _factory.Create();
 
+            conn.Open();
+            if (conn.State != System.Data.ConnectionState.Open)
+            {
+                throw new InvalidOperationException("Database connection is not open.");
+            }
+
             const string sql = """
                 INSERT INTO Plants (Id, Name, Localization, Description, WaterIntervalDays, CreatedAt, LastWaterAt, LastUpdatedAt)
                 VALUES (@Id, @Name, @Localization, @Description, @WaterIntervalDays, @CreatedAt, @LastWaterAt, @LastUpdatedAt);
             """;
 
-            await conn.ExecuteAsync(sql, entity);
+            await conn.ExecuteAsync(sql, new
+            {
+                Id = entity.Id.ToString(),
+                Name = entity.Name,
+                Localization = entity.Localization,
+                Description = entity.Description,
+                WaterIntervalDays = entity.WaterIntervalDays,
+                CreatedAt = entity.CreatedAt,
+                LastWaterAt = entity.LastWaterAt,
+                LastUpdatedAt = entity.LastUpdatedAt
+            });
         }
         catch (Exception ex)
         {
@@ -153,7 +160,7 @@ public class PlantRepository : IPlantRepository
                 DELETE FROM Plants WHERE Id = @Id;
             """;
 
-            await conn.ExecuteAsync(sql, new { Id = id });
+            await conn.ExecuteAsync(sql, new { Id = id.ToString() });
         }
         catch (Exception ex)
         {

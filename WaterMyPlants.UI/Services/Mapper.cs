@@ -37,7 +37,7 @@ public class Mapper : IMapper
             {
                 Id = n.Id,
                 Text = n.Text,
-                LastSave = n.LastSave
+                LastSave = n.LastUpdatedAt
             }),
             Photos = dto.Photos.Select(p => new PhotoModel
             {

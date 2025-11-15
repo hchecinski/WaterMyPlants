@@ -3,13 +3,18 @@ using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using WaterMyPlants.Application.Services;
 using WaterMyPlants.UI.Models;
+using WaterMyPlants.UI.Services;
 
 namespace WaterMyPlants.UI.ViewModels;
 
 [QueryProperty(nameof(Model), "Model")]
 public partial class PlantDetailsViewModel : ObservableObject
 {
+    private readonly INavigationService _navigationService;
+    private readonly IPlantService _plantService;
+
     [ObservableProperty]
     private PlantDetailsModel _model;
 
@@ -45,29 +50,44 @@ public partial class PlantDetailsViewModel : ObservableObject
         Photos = value.Photos?.ToObservableCollection() ?? new ObservableCollection<PhotoModel>();
     }
 
+    public PlantDetailsViewModel(INavigationService navigationService, IPlantService plantService)
+    {
+        _navigationService = navigationService;
+        _plantService = plantService;
+    }
+
     private async Task WaterAsync()
     {
-        // TODO
+        await Shell.Current.DisplayAlert("Podlej roślinę", "Funkcjonalność w budowie.", "OK");
     }
 
     private async Task AddNoteAsync()
     {
-        // TODO
+        await Shell.Current.DisplayAlert("Dodaj notatkę", "Funkcjonalność w budowie.", "OK");
     }
 
     private async Task AddPhotoAsync()
     {
-        // TODO
+        await Shell.Current.DisplayAlert("Dodaj zdjęcie", "Funkcjonalność w budowie.", "OK");
     }
 
     private async Task EditAsync()
     {
-        // TODO
+        await Shell.Current.DisplayAlert("Edytuj roślinę", "Funkcjonalność w budowie.", "OK");
     }
 
     private async Task DeleteAsync()
     {
-        // TODO
+        var question = $"Czy napewno chcesz usunąć {Name}? Wszystkie dane zostaną bezpowrotnie skasowane.";
+        var delete = await Shell.Current.DisplayAlert("Ostrzeżenie", question, accept: "Tak", cancel: "Nie");
+
+        if(!delete)
+        {
+            return;
+        }
+
+        await _plantService.DeleteAsync(Model.Id);
+        await _navigationService.GoBack();
     }
 
     [RelayCommand]

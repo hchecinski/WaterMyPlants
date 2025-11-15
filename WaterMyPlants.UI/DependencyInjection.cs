@@ -20,6 +20,9 @@ public static class DependencyInjection
         services.AddTransient<PlantListItemView>();
         services.AddTransient<PlantListItemViewModel>();
 
+        services.AddTransient<PlantFormPage>();
+        services.AddTransient<PlantFormViewModel>();
+
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IMapper, Mapper>();
         services.AddSingleton<IPlantViewModelFactory, PlantViewModelFactory>();

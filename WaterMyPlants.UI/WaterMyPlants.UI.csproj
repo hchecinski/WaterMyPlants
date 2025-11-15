@@ -46,6 +46,7 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
+		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -58,12 +59,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiAsset Include="Resources\Splash\splash.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Views\PlantFormPage.xaml.cs">
+	    <DependentUpon>PlantFormPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\PlantDetailsPage.xaml.cs">
 	    <DependentUpon>PlantDetailsPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\PlantFormPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\PlantDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

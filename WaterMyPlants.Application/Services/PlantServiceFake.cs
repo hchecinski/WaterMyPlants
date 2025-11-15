@@ -59,8 +59,8 @@ public class PlantServiceFake : IPlantService
 
                 Notes = new List<NoteDto>
                 {
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastSave = DateTime.UtcNow.AddDays(-2) },
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastSave = DateTime.UtcNow.AddDays(-6) }
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastUpdatedAt = DateTime.UtcNow.AddDays(-2) },
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastUpdatedAt = DateTime.UtcNow.AddDays(-6) }
                 },
 
                 Photos = new List<PhotoDto>
@@ -82,32 +82,32 @@ public class PlantServiceFake : IPlantService
 
                 Notes = new List<NoteDto>
                 {
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant2Id, Text = "Mało wody", CreatedAt = DateTime.UtcNow.AddDays(-5), LastSave = DateTime.UtcNow },
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant3Id, Text = "Super rośnie!", CreatedAt = DateTime.UtcNow.AddDays(-3), LastSave = DateTime.UtcNow.AddDays(-1)  },
-                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastSave = DateTime.UtcNow.AddDays(-2) },
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastSave = DateTime.UtcNow.AddDays(-6) },
-                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastSave = DateTime.UtcNow.AddDays(-2) },
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastSave = DateTime.UtcNow.AddDays(-6) },
-                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastSave = DateTime.UtcNow.AddDays(-2) },
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastSave = DateTime.UtcNow.AddDays(-6) },
-                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastSave = DateTime.UtcNow.AddDays(-2) },
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastSave = DateTime.UtcNow.AddDays(-6) },
-                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastSave = DateTime.UtcNow.AddDays(-2) },
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastSave = DateTime.UtcNow.AddDays(-6) },
-                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastSave = DateTime.UtcNow.AddDays(-2) },
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastSave = DateTime.UtcNow.AddDays(-6) },
-                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastSave = DateTime.UtcNow.AddDays(-2) },
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastSave = DateTime.UtcNow.AddDays(-6) },
-                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastSave = DateTime.UtcNow.AddDays(-2) },
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastSave = DateTime.UtcNow.AddDays(-6) },
-                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastSave = DateTime.UtcNow.AddDays(-2) },
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastSave = DateTime.UtcNow.AddDays(-6) },
-                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastSave = DateTime.UtcNow.AddDays(-2) },
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastSave = DateTime.UtcNow.AddDays(-6) },
-                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastSave = DateTime.UtcNow.AddDays(-2) },
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastSave = DateTime.UtcNow.AddDays(-6) },
-                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastSave = DateTime.UtcNow.AddDays(-2) },
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastSave = DateTime.UtcNow.AddDays(-6) }
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant2Id, Text = "Mało wody", CreatedAt = DateTime.UtcNow.AddDays(-5), LastUpdatedAt = DateTime.UtcNow },
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant3Id, Text = "Super rośnie!", CreatedAt = DateTime.UtcNow.AddDays(-3), LastUpdatedAt = DateTime.UtcNow.AddDays(-1)  },
+                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastUpdatedAt = DateTime.UtcNow.AddDays(-2) },
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastUpdatedAt = DateTime.UtcNow.AddDays(-6) },
+                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastUpdatedAt = DateTime.UtcNow.AddDays(-2) },
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastUpdatedAt = DateTime.UtcNow.AddDays(-6) },
+                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastUpdatedAt = DateTime.UtcNow.AddDays(-2) },
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastUpdatedAt = DateTime.UtcNow.AddDays(-6) },
+                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastUpdatedAt = DateTime.UtcNow.AddDays(-2) },
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastUpdatedAt = DateTime.UtcNow.AddDays(-6) },
+                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastUpdatedAt = DateTime.UtcNow.AddDays(-2) },
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastUpdatedAt = DateTime.UtcNow.AddDays(-6) },
+                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastUpdatedAt = DateTime.UtcNow.AddDays(-2) },
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastUpdatedAt = DateTime.UtcNow.AddDays(-6) },
+                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastUpdatedAt = DateTime.UtcNow.AddDays(-2) },
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastUpdatedAt = DateTime.UtcNow.AddDays(-6) },
+                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastUpdatedAt = DateTime.UtcNow.AddDays(-2) },
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastUpdatedAt = DateTime.UtcNow.AddDays(-6) },
+                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastUpdatedAt = DateTime.UtcNow.AddDays(-2) },
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastUpdatedAt = DateTime.UtcNow.AddDays(-6) },
+                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastUpdatedAt = DateTime.UtcNow.AddDays(-2) },
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastUpdatedAt = DateTime.UtcNow.AddDays(-6) },
+                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastUpdatedAt = DateTime.UtcNow.AddDays(-2) },
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastUpdatedAt = DateTime.UtcNow.AddDays(-6) },
+                                        new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Podlana", CreatedAt = DateTime.UtcNow.AddDays(-2), LastUpdatedAt = DateTime.UtcNow.AddDays(-2) },
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant1Id, Text = "Przestawiona bliżej okna", CreatedAt = DateTime.UtcNow.AddDays(-10), LastUpdatedAt = DateTime.UtcNow.AddDays(-6) }
 
                 },
 
@@ -129,7 +129,7 @@ public class PlantServiceFake : IPlantService
 
                 Notes = new List<NoteDto>
                 {
-                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant3Id, Text = "Super rośnie!", CreatedAt = DateTime.UtcNow.AddDays(-3), LastSave = DateTime.UtcNow.AddDays(-1)  }
+                    new NoteDto { Id = Guid.NewGuid(), PlantId = plant3Id, Text = "Super rośnie!", CreatedAt = DateTime.UtcNow.AddDays(-3), LastUpdatedAt = DateTime.UtcNow.AddDays(-1)  }
                 },
 
                 Photos = new List<PhotoDto>()
@@ -157,7 +157,7 @@ public class PlantServiceFake : IPlantService
 
     // Operacje mutujące nie są potrzebne w fake — można zostawić NotImplemented
 
-    public Task<Guid> AddAsync(PlantDto plant)
+    public Task<Guid> AddAsync(CreatePlantDto createPlantDto)
         => throw new NotImplementedException();
 
     public Task UpdateAsync(PlantDto plant)
