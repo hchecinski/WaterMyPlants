@@ -7,8 +7,10 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddSingleton<IPlantService, PlantService>();
-        services.AddSingleton<IMapper, Mapper>();
+        services.AddTransient<IMapper, Mapper>();
+
+        services.AddTransient<IPlantService, PlantService>();
+        services.AddTransient<INoteService, NoteService>();
 
         return services;
     }

@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using WaterMyPlants.Application.Services;
+using WaterMyPlants.UI.Factories;
 using WaterMyPlants.UI.Models;
 using WaterMyPlants.UI.Services;
 
@@ -14,31 +15,64 @@ public partial class PlantDetailsViewModel : ObservableObject
 {
     private readonly INavigationService _navigationService;
     private readonly IPlantService _plantService;
+    private readonly INoteService _noteService;
     private readonly IMapper _mapper;
+    private readonly INoteFactory _noteFactory;
 
     [ObservableProperty]
     private PlantDetailsModel _model;
 
     [ObservableProperty]
-    private string _noteText;
+    private NoteFormViewModel _noteEditorViewModel;
+
     [ObservableProperty]
-    private bool _isVisibleNoteEditor;
+    private bool _isVisibleNoteEditor = false;
+
     [ObservableProperty]
     private bool _actionBtnIsVisible = true;
+
     [ObservableProperty]
     private string _name = string.Empty;
+
     [ObservableProperty]
     private string? _localization = string.Empty;
+
     [ObservableProperty]
     private string? _description  = string.Empty;
+
     [ObservableProperty]
     private DateTime? _createdAt;
+
     [ObservableProperty]
     private DateTime? _lastWaterAt;
+
     [ObservableProperty]
     private DateTime? _nextWaterAt;
+
+    private NoteModel? _selectedNote;
+    public NoteModel? SelectedNote
+    {
+        get => _selectedNote;
+        set 
+        {
+            if(_selectedNote != null)
+            {
+                _selectedNote.IsSelected = false;
+            }
+
+            _selectedNote = value;
+            if(_selectedNote != null)
+            {
+                _selectedNote.IsSelected = true;
+                EditNote();
+            }
+            OnPropertyChanged(nameof(SelectedNote));
+        }
+    }
+
     [ObservableProperty]
     private ObservableCollection<NoteModel> _notes = new();
+
     [ObservableProperty]
     private ObservableCollection<PhotoModel> _photos = new();
 
@@ -57,11 +91,13 @@ public partial class PlantDetailsViewModel : ObservableObject
         Photos = value.Photos?.ToObservableCollection() ?? new ObservableCollection<PhotoModel>();
     }
 
-    public PlantDetailsViewModel(INavigationService navigationService, IPlantService plantService, IMapper mapper)
+    public PlantDetailsViewModel(INavigationService navigationService, IPlantService plantService, INoteService noteService, IMapper mapper, INoteFactory noteFactory)
     {
         _navigationService = navigationService;
         _plantService = plantService;
+        _noteService = noteService;
         _mapper = mapper;
+        _noteFactory = noteFactory;
     }
 
     private async Task WaterAsync()
@@ -69,11 +105,20 @@ public partial class PlantDetailsViewModel : ObservableObject
         await Shell.Current.DisplayAlert("Podlej roślinę", "Funkcjonalność w budowie.", "OK");
     }
 
-    private async Task AddNoteAsync()
+    private void AddNote()
     {
         ActionBtnIsVisible = false;
         IsVisibleNoteEditor = true;
-        NoteText = string.Empty;
+
+        NoteEditorViewModel = _noteFactory.CreateNoteFormViewModel(Model.Id, RefreshNotes, CancelNote);
+    }
+
+    private void EditNote()
+    {
+        ActionBtnIsVisible = false;
+        IsVisibleNoteEditor = true;
+
+        NoteEditorViewModel = _noteFactory.CreateNoteFormViewModel(SelectedNote!, RefreshNotes, CancelNote);
     }
 
     private async Task AddPhotoAsync()
@@ -101,6 +146,27 @@ public partial class PlantDetailsViewModel : ObservableObject
         await _navigationService.GoBack();
     }
 
+    private async Task RefreshNotes()
+    {
+        var notes = await _noteService.GetNotes(Model.Id);
+        Notes.Clear();
+        foreach (var note in notes)
+        {
+            var noteModel = _mapper.ToModel(note);
+            Notes.Add(noteModel);
+        }
+
+        ActionBtnIsVisible = true;
+        IsVisibleNoteEditor = false;
+    }
+
+    private void CancelNote()
+    {
+        SelectedNote = null;
+        ActionBtnIsVisible = true;
+        IsVisibleNoteEditor = false;
+    }
+
     [RelayCommand]
     public async Task ShowActions()
     {
@@ -121,7 +187,7 @@ public partial class PlantDetailsViewModel : ObservableObject
                 await WaterAsync();
                 break;
             case "Dodaj notatkę":
-                await AddNoteAsync();
+                AddNote();
                 break;
             case "Dodaj zdjęcie":
                 await AddPhotoAsync();
@@ -133,17 +199,5 @@ public partial class PlantDetailsViewModel : ObservableObject
                 await DeleteAsync();
                 break;
         }
-    }
-
-    [RelayCommand]
-    private async Task SaveNote()
-    {
-        if (string.IsNullOrWhiteSpace(NoteText))
-        {
-            await Shell.Current.DisplayAlert("Błąd", "Notatka nie może być pusta.", "OK");
-            return;
-        }
-        IsVisibleNoteEditor = false;
-        ActionBtnIsVisible = true;
     }
 }

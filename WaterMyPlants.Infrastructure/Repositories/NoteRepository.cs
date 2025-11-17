@@ -42,7 +42,7 @@ public class NoteRepository : INoteRepository
             var sql = @"UPDATE Notes
                         SET 
                             Text = @Text,
-                            UpdatedAt = @UpdatedAt
+                            LastUpdatedAt = @LastUpdatedAt
                         WHERE Id = @Id;";
 
             await conn.ExecuteAsync(sql, entity);
@@ -66,6 +66,40 @@ public class NoteRepository : INoteRepository
         catch(Exception ex)
         {
             Debug.WriteLine(ex.Message);
+        }
+    }
+
+    public async Task<Note?> GetItemByIdAsync(Guid noteId)
+    {
+        try
+        {
+            using var conn = _connectionFactory.Create();
+
+            var sql = @"SELECT * FROM Notes WHERE Id = @Id;";
+
+            return await conn.QuerySingleOrDefaultAsync<Note>(sql, new { Id = noteId.ToString() });
+        }
+        catch(Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return null;
+        }
+    }
+
+    public async Task<IEnumerable<Note>> GetNotes(Guid plantId)
+    {
+        try
+        {
+            using var conn = _connectionFactory.Create();
+
+            var sql = @"SELECT * FROM Notes WHERE PlantId = @PlantId;";
+
+            return await conn.QueryAsync<Note>(sql, new { PlantId = plantId.ToString() });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return Enumerable.Empty<Note>();
         }
     }
 }

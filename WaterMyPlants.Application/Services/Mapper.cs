@@ -5,6 +5,18 @@ namespace WaterMyPlants.Application.Services;
 
 public class Mapper : IMapper
 {
+    public NoteDto ToNoteDto(Note note)
+    {
+        return new NoteDto()
+        {
+            Id = Guid.Parse(note.Id),
+            PlantId = Guid.Parse(note.PlantId),
+            CreatedAt = note.CreatedAt,
+            LastUpdatedAt = note.LastUpdatedAt,
+            Text = note.Text
+        };
+    }
+
     public PlantDetailsDto ToPlantDetailsDto(Plant dto)
     {
         if(!Guid.TryParse( dto.Id, out var id))

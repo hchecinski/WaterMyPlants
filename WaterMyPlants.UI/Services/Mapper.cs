@@ -50,6 +50,18 @@ public class Mapper : IMapper
         return viewModel;
     }
 
+    public NoteModel ToModel(NoteDto note)
+    {
+        return new NoteModel
+        {
+            Id = note.Id,
+            PlantId = note.PlantId,
+            Text = note.Text,
+            CreatedAt = note.CreatedAt,
+            LastSave = note.LastUpdatedAt
+        };
+    }
+
     public UpdatePlantDto ToUpdatePlantDto(PlantDetailsModel model)
     {
         return new UpdatePlantDto

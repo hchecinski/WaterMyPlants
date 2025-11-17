@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:WaterMyPlants.UI.ViewModels"
+             x:Name="contView"
+             x:DataType="vm:NoteFormViewModel"
              x:Class="WaterMyPlants.UI.Views.NoteFormView">
-    <Grid Grid.Row="2" RowDefinitions="*, auto">
-        <Editor Placeholder="Treść notatki..."
+    <Frame Padding="20" Margin="10">
+        <Grid Grid.Row="2" RowDefinitions="*, auto">
+            <Editor Placeholder="Treść notatki..."
                     Text="{Binding NoteText}"
                     AutoSize="TextChanges"
                     HeightRequest="100"
                     Margin="20,0,20,10"/>
-        <Button Grid.Row="1"
-                    Text="Zapisz notatkę"
-                    Style="{StaticResource PrimaryButtonStyle}"
-                    Command="{Binding SaveNoteCommand}"
-                    Margin="20,0,20,20"/>
-    </Grid>
+
+            <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                <Button Text="Anuluj"
+                        Margin="20,0,0,20"
+                        Command="{Binding CancelCommand}"
+                        Style="{StaticResource Cancel}"/>
+                <Button Grid.Column="1"
+                        Text="Zapisz notatkę"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Command="{Binding SaveCommand}"
+                        Margin="20,0,20,20"/>
+            </Grid>
+        </Grid>
+    </Frame>
 </ContentView>

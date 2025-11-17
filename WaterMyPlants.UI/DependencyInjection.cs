@@ -20,12 +20,16 @@ public static class DependencyInjection
         services.AddTransient<PlantListItemView>();
         services.AddTransient<PlantListItemViewModel>();
 
+        services.AddTransient<NoteFormView>();
+        services.AddTransient<NoteFormViewModel>();
+
         services.AddTransient<PlantFormPage>();
         services.AddTransient<PlantFormViewModel>();
 
-        services.AddSingleton<INavigationService, NavigationService>();
-        services.AddSingleton<IMapper, Mapper>();
-        services.AddSingleton<IPlantViewModelFactory, PlantViewModelFactory>();
+        services.AddTransient<INavigationService, NavigationService>();
+        services.AddTransient<IMapper, Mapper>();
+        services.AddTransient<IPlantViewModelFactory, PlantViewModelFactory>();
+        services.AddTransient<INoteFactory, NoteFactory>();
 
         services.AddSingleton<ISqliteConnectionFactory>(new SqliteConnectionFactory(Path.Combine(FileSystem.AppDataDirectory, "WaterMyPlantsDb.db")));
 
