@@ -52,4 +52,15 @@ public class Mapper : IMapper
             DaysRemaining = (plant.LastWaterAt?.AddDays(plant.WaterIntervalDays) - DateTime.UtcNow)?.Days ?? plant.WaterIntervalDays
         };
     }
+
+    public UpdatablePlantDto ToUpdatablePlantDto(Plant plant)
+    {
+        return new UpdatablePlantDto
+        {
+            Name = plant.Name,
+            Localization = plant.Localization,
+            Description = plant.Description,
+            WaterIntervalDays = plant.WaterIntervalDays
+        };
+    }
 }

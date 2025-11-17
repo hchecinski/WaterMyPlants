@@ -51,14 +51,37 @@ public class PlantService : IPlantService
         return plantsDto.OrderByDescending(p => p.DaysRemaining).ToList();
     }
 
+    public async Task<UpdatablePlantDto> GetUpdatablePlantAsync(Guid value)
+    {
+        var plant = await _plantRepository.GetAsync(value);
+
+        if (plant == null)
+        {
+            throw new KeyNotFoundException($"Plant with id '{value}' was not found.");
+        }
+
+        plant.Validate();
+
+        return _mapper.ToUpdatablePlantDto(plant);
+    }
+
     public Task UndoWaterAsync(Guid id, DateTime previousUtc)
     {
         throw new NotImplementedException();
     }
 
-    public Task UpdateAsync(PlantDto plant)
+    public async Task UpdateAsync(UpdatePlantDto plantDto)
     {
-        throw new NotImplementedException();
+        var plant = await _plantRepository.GetAsync(plantDto.Id);
+
+        if (plant == null)
+        {
+            throw new KeyNotFoundException($"Plant with id '{plantDto.Id}' was not found.");
+        }
+        plant.Validate();
+        plant.Update(plantDto.Name, plantDto.Description, plantDto.Localization, plantDto.WaterIntervalDays);
+
+        await _plantRepository.UpdateAsync(plant);
     }
 
     public Task WaterNowAsync(Guid id, DateTime nowUtc)

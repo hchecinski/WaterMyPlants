@@ -5,7 +5,6 @@ using System.Diagnostics;
 using WaterMyPlants.Application.Services;
 using WaterMyPlants.UI.Factories;
 using WaterMyPlants.UI.Services;
-using IMapper = WaterMyPlants.UI.Services.IMapper;
 
 namespace WaterMyPlants.UI.ViewModels;
 

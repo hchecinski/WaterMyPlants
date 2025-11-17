@@ -138,7 +138,7 @@ public class PlantRepository : IPlantRepository
                     Description = @Description,
                     Localization = @Localization,
                     WaterIntervalDays = @WaterIntervalDays,
-                    LastUpdatedAt = @LastUpdatedAt,
+                    LastUpdatedAt = @LastUpdatedAt 
                 WHERE Id = @Id;
             """;
 

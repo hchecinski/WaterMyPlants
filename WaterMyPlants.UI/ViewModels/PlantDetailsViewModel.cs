@@ -1,8 +1,8 @@
-﻿
-using CommunityToolkit.Maui.Core.Extensions;
+﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 using WaterMyPlants.Application.Services;
 using WaterMyPlants.UI.Models;
 using WaterMyPlants.UI.Services;
@@ -14,10 +14,17 @@ public partial class PlantDetailsViewModel : ObservableObject
 {
     private readonly INavigationService _navigationService;
     private readonly IPlantService _plantService;
+    private readonly IMapper _mapper;
 
     [ObservableProperty]
     private PlantDetailsModel _model;
 
+    [ObservableProperty]
+    private string _noteText;
+    [ObservableProperty]
+    private bool _isVisibleNoteEditor;
+    [ObservableProperty]
+    private bool _actionBtnIsVisible = true;
     [ObservableProperty]
     private string _name = string.Empty;
     [ObservableProperty]
@@ -50,10 +57,11 @@ public partial class PlantDetailsViewModel : ObservableObject
         Photos = value.Photos?.ToObservableCollection() ?? new ObservableCollection<PhotoModel>();
     }
 
-    public PlantDetailsViewModel(INavigationService navigationService, IPlantService plantService)
+    public PlantDetailsViewModel(INavigationService navigationService, IPlantService plantService, IMapper mapper)
     {
         _navigationService = navigationService;
         _plantService = plantService;
+        _mapper = mapper;
     }
 
     private async Task WaterAsync()
@@ -63,7 +71,9 @@ public partial class PlantDetailsViewModel : ObservableObject
 
     private async Task AddNoteAsync()
     {
-        await Shell.Current.DisplayAlert("Dodaj notatkę", "Funkcjonalność w budowie.", "OK");
+        ActionBtnIsVisible = false;
+        IsVisibleNoteEditor = true;
+        NoteText = string.Empty;
     }
 
     private async Task AddPhotoAsync()
@@ -73,7 +83,8 @@ public partial class PlantDetailsViewModel : ObservableObject
 
     private async Task EditAsync()
     {
-        await Shell.Current.DisplayAlert("Edytuj roślinę", "Funkcjonalność w budowie.", "OK");
+        var plant = _mapper.ToUpdatePlantDto(Model);
+        await _navigationService.NavigateToPlantFormPage(plant);
     }
 
     private async Task DeleteAsync()
@@ -122,5 +133,17 @@ public partial class PlantDetailsViewModel : ObservableObject
                 await DeleteAsync();
                 break;
         }
+    }
+
+    [RelayCommand]
+    private async Task SaveNote()
+    {
+        if (string.IsNullOrWhiteSpace(NoteText))
+        {
+            await Shell.Current.DisplayAlert("Błąd", "Notatka nie może być pusta.", "OK");
+            return;
+        }
+        IsVisibleNoteEditor = false;
+        ActionBtnIsVisible = true;
     }
 }

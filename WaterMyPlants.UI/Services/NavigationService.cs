@@ -1,4 +1,5 @@
-﻿using WaterMyPlants.Domain.Models;
+﻿using WaterMyPlants.Application.Models;
+using WaterMyPlants.Domain.Models;
 using WaterMyPlants.UI.Models;
 using WaterMyPlants.UI.Views;
 
@@ -6,6 +7,14 @@ namespace WaterMyPlants.UI.Services;
 
 public class NavigationService : INavigationService
 {
+    public async Task BackToPlantDetailsPage(PlantDetailsModel plant)
+    {
+        await Shell.Current.GoToAsync("..", new Dictionary<string, object>
+        {
+            { "Model" , plant }
+        });
+    }
+
     public async Task GoBack()
     {
         await Shell.Current.GoToAsync("..");
@@ -19,8 +28,17 @@ public class NavigationService : INavigationService
         });
     }
 
-    public async Task NavigateToPlantFormPage()
+    public async Task NavigateToPlantFormPage(UpdatePlantDto? plant)
     {
-        await Shell.Current.GoToAsync(nameof(PlantFormPage));
+        if (plant == null)
+        {
+            await Shell.Current.GoToAsync(nameof(PlantFormPage));
+            return;
+        }
+
+        await Shell.Current.GoToAsync(nameof(PlantFormPage), new Dictionary<string, object>()
+        {
+            { "Model", plant }
+        });
     }
 }

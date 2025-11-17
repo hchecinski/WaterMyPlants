@@ -49,4 +49,18 @@ public class Mapper : IMapper
 
         return viewModel;
     }
+
+    public UpdatePlantDto ToUpdatePlantDto(PlantDetailsModel model)
+    {
+        return new UpdatePlantDto
+        {
+            Id = model.Id,
+            Name = model.Name,
+            Description = model.Description,
+            Localization = model.Localization,
+            WaterIntervalDays = model.NextWaterAt.HasValue && model.LastWaterAt.HasValue
+                ? (model.NextWaterAt.Value - model.LastWaterAt.Value).Days
+                : 0
+        };
+    }
 }

@@ -7,4 +7,5 @@ public interface IMapper
 {
     PlantDetailsDto ToPlantDetailsDto(Plant dto);
     PlantListItemDto ToPlantListItemDto(Plant dto);
+    UpdatablePlantDto ToUpdatablePlantDto(Plant plant);
 }

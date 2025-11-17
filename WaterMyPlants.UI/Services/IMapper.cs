@@ -8,4 +8,5 @@ public interface IMapper
 {
     PlantListItemModel ToModel(PlantListItemDto dto);
     PlantDetailsModel ToModel(PlantDetailsDto dto);
+    UpdatePlantDto ToUpdatePlantDto(PlantDetailsModel model);
 }

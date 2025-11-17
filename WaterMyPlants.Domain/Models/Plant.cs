@@ -42,6 +42,42 @@ public class Plant : UpdatableEntity
         _photos.AddRange(photos);
     }
 
+    public void Validate()
+    {
+        if(string.IsNullOrWhiteSpace(Id))
+        {
+            throw new ArgumentException("Plant ID cannot be null or empty.");
+        }
+        if (string.IsNullOrWhiteSpace(Name))
+        {
+            throw new ArgumentException("Plant name cannot be null or empty.");
+        }
+        if (WaterIntervalDays <= 0)
+        {
+            throw new ArgumentException("Water interval days must be greater than zero.");
+        }
+    }
+
+    public void Update(string name, string? description, string? localization, int waterIntervalDays)
+    {
+        if(!Equals(Name, name))
+        {
+            Name = name;
+        }
+        if(!Equals(Description, description))
+        {
+            Description = description;
+        }
+        if(!Equals(Localization, localization))
+        {
+            Localization = localization;
+        }
+        if(!Equals(WaterIntervalDays, waterIntervalDays))
+        {
+            WaterIntervalDays = waterIntervalDays;
+        }
+    }
+
     public Plant(string name, int waterIntervalDays, string? localization = null, string? description = null)
     {
         Name = name;

@@ -9,4 +9,10 @@ public partial class PlantFormPage : ContentPage
 		InitializeComponent();
 		BindingContext = plantFormViewModel;
     }
+
+	override protected void OnAppearing()
+	{
+		base.OnAppearing();
+		((PlantFormViewModel)BindingContext).OnAppearing();
+    }
 }
