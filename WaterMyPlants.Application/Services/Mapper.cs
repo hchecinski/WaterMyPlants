@@ -31,15 +31,15 @@ public class Mapper : IMapper
             Localization = dto.Localization,
             Description = dto.Description,
             CreatedAt = dto.CreatedAt,
-            LastWaterAt = dto.LastWaterAt,
+            LastWaterAt = dto.LastWaterAt ?? dto.CreatedAt,
             NextWaterAt = dto.LastWaterAt.HasValue
                 ? dto.LastWaterAt.Value.AddDays(dto.WaterIntervalDays)
-                : null,
+                : dto.CreatedAt.AddDays(dto.WaterIntervalDays),
             Notes = dto.Notes.Select(n => new NoteDto
             {
                 Id = Guid.Parse(n.Id),
                 Text = n.Text,
-                LastUpdatedAt = n.LastUpdatedAt,
+                LastUpdatedAt = n.LastUpdatedAt ?? n.CreatedAt,
                 CreatedAt = n.CreatedAt,
                 PlantId = id
             }),

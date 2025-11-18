@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using WaterMyPlants.Application.Services;
 using WaterMyPlants.UI.Factories;
 using WaterMyPlants.UI.Models;
@@ -49,27 +50,6 @@ public partial class PlantDetailsViewModel : ObservableObject
     [ObservableProperty]
     private DateTime? _nextWaterAt;
 
-    private NoteModel? _selectedNote;
-    public NoteModel? SelectedNote
-    {
-        get => _selectedNote;
-        set 
-        {
-            if(_selectedNote != null)
-            {
-                _selectedNote.IsSelected = false;
-            }
-
-            _selectedNote = value;
-            if(_selectedNote != null)
-            {
-                _selectedNote.IsSelected = true;
-                EditNote();
-            }
-            OnPropertyChanged(nameof(SelectedNote));
-        }
-    }
-
     [ObservableProperty]
     private ObservableCollection<NoteModel> _notes = new();
 
@@ -113,14 +93,6 @@ public partial class PlantDetailsViewModel : ObservableObject
         NoteEditorViewModel = _noteFactory.CreateNoteFormViewModel(Model.Id, RefreshNotes, CancelNote);
     }
 
-    private void EditNote()
-    {
-        ActionBtnIsVisible = false;
-        IsVisibleNoteEditor = true;
-
-        NoteEditorViewModel = _noteFactory.CreateNoteFormViewModel(SelectedNote!, RefreshNotes, CancelNote);
-    }
-
     private async Task AddPhotoAsync()
     {
         await Shell.Current.DisplayAlert("Dodaj zdjęcie", "Funkcjonalność w budowie.", "OK");
@@ -162,7 +134,6 @@ public partial class PlantDetailsViewModel : ObservableObject
 
     private void CancelNote()
     {
-        SelectedNote = null;
         ActionBtnIsVisible = true;
         IsVisibleNoteEditor = false;
     }
@@ -199,5 +170,30 @@ public partial class PlantDetailsViewModel : ObservableObject
                 await DeleteAsync();
                 break;
         }
+
+    }
+
+    [RelayCommand]
+    private async Task DeleteNote(NoteModel noteModel)
+    {
+        var question = $"Czy napewno chcesz usunąć notatkę?";
+        var delete = await Shell.Current.DisplayAlert("Ostrzeżenie", question, accept: "Tak", cancel: "Nie");
+
+        if (!delete)
+        {
+            return;
+        }
+
+        await _noteService.DeleteNoteAsync(noteModel.Id);
+        await RefreshNotes();
+    }
+
+    [RelayCommand]
+    private void EditNote(NoteModel noteModel)
+    {
+        ActionBtnIsVisible = false;
+        IsVisibleNoteEditor = true;
+
+        NoteEditorViewModel = _noteFactory.CreateNoteFormViewModel(noteModel, RefreshNotes, CancelNote);
     }
 }

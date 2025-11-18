@@ -30,14 +30,16 @@ public class Mapper : IMapper
             Localization = dto.Localization,
             Description = dto.Description,
             CreatedAt = dto.CreatedAt,
-            LastWaterAt = dto.LastWaterAt,
+            LastWaterAt = dto.LastWaterAt ?? dto.CreatedAt,
             NextWaterAt = dto.NextWaterAt,
 
             Notes = dto.Notes.Select(n => new NoteModel
             {
                 Id = n.Id,
                 Text = n.Text,
-                LastSave = n.LastUpdatedAt
+                LastSave = n.LastUpdatedAt ?? n.CreatedAt,
+                CreatedAt = n.CreatedAt,
+                PlantId = n.Id,
             }),
             Photos = dto.Photos.Select(p => new PhotoModel
             {

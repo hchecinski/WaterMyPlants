@@ -61,7 +61,7 @@ public class NoteRepository : INoteRepository
 
             var sql = @"DELETE FROM Notes WHERE Id = @Id;";
 
-            await conn.ExecuteAsync(sql, new { Id = id });
+            await conn.ExecuteAsync(sql, new { Id = id.ToString() });
         }
         catch(Exception ex)
         {
