@@ -8,7 +8,6 @@
              x:Name="contPage"
              x:DataType="vm:PlantDetailsViewModel"
              Title="Szczegóły rośliny">
-
     <Grid RowDefinitions="*,auto, auto">
         <ScrollView>
 
@@ -56,7 +55,37 @@
 
                 <Label Text="Zdjęcia:" FontSize="18" />
 
-                <CollectionView ItemsSource="{Binding Photos}"/>
+                <CollectionView ItemsSource="{Binding Photos}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:PhotoModel">
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems Mode="Execute">
+                                        <SwipeItem
+                                              BackgroundColor="IndianRed"
+                                              Command="{Binding BindingContext.DeletePhotoCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                              CommandParameter="{Binding .}" />
+
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <SwipeView.LeftItems>
+                                    <SwipeItems Mode="Execute">
+                                        <SwipeItem 
+                                              BackgroundColor="DarkSeaGreen"
+                                              Command="{Binding BindingContext.EditPhotoCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                              CommandParameter="{Binding .}" />
+                                    </SwipeItems>
+                                </SwipeView.LeftItems>
+                                <Frame Padding="10" Margin="0,5" InputTransparent="True">
+                                    <Grid RowDefinitions="auto, *">
+                                        <Image Source="{Binding Path}" Aspect="AspectFit"/>
+                                        <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="Caption" Margin="5" HorizontalTextAlignment="Center" Grid.Row="1"/>
+                                    </Grid>
+                                </Frame>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
             </VerticalStackLayout>
 
@@ -66,13 +95,17 @@
         <Button Grid.Row="1"
                 IsVisible="{Binding ActionBtnIsVisible}"
                 Text="Akcje"
-                Margin="20,0,20,20"
+                Margin="10"
                 Style="{StaticResource PrimaryButtonStyle}"
                 Command="{Binding ShowActionsCommand}">
         </Button>
 
         <Grid Grid.Row="2" IsVisible="{Binding IsVisibleNoteEditor}">
-            <controls:NoteFormView  BindingContext="{Binding NoteEditorViewModel}" />
+            <controls:NoteFormView  BindingContext="{Binding NoteEditorViewModel}"  />
+        </Grid>
+
+        <Grid Grid.Row="2" IsVisible="{Binding IsVisiblePhotoForm}">
+            <controls:PhotoFormView BindingContext="{Binding PhotoFormViewModel}"/>
         </Grid>
     </Grid>
 </ContentPage>

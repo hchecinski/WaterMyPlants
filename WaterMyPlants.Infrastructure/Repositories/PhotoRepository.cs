@@ -21,13 +21,14 @@ public class PhotoRepository : IPhotoRepository
         {
             using var conn = _factory.Create();
 
-            var sql = @"INSERT INTO Photos (Id, PlantId, Path, CreatedAt) VALUES (@Id, @PlantId, @Path, @CreatedAt);";
+            var sql = @"INSERT INTO Photos (Id, PlantId, Path, CreatedAt, Name, LastUpdatedAt) VALUES (@Id, @PlantId, @Path, @CreatedAt, @Name, @LastUpdatedAt);";
 
             await conn.ExecuteAsync(sql, entity);
         }
         catch(Exception ex)
         {
             Debug.WriteLine(ex.Message);
+            throw new Exception();
         }
     }
 
@@ -39,11 +40,65 @@ public class PhotoRepository : IPhotoRepository
 
             var sql = @"DELETE FROM Photos WHERE Id = @Id;";
 
-            await conn.ExecuteAsync(sql, new { Id = id });
+            await conn.ExecuteAsync(sql, new { Id = id.ToString() });
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
+        }
+    }
+
+    public async Task UpdateAsync(Photo entity)
+    {
+        try
+        {
+            using var conn = _factory.Create();
+
+            var sql = @"UPDATE Photos
+                        SET 
+                            Name = @Name,
+                            LastUpdatedAt = @LastUpdatedAt
+                        WHERE Id = @Id;";
+
+            await conn.ExecuteAsync(sql, entity);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
+    }
+
+    public async Task<IEnumerable<Photo>> GetAllAsync(Guid plantId)
+    {
+        try
+        {
+            using var conn = _factory.Create();
+
+            var sql = @"SELECT * FROM Photos WHERE PlantId = @PlantId;";
+
+            return await conn.QueryAsync<Photo>(sql, new { PlantId = plantId.ToString() });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return Enumerable.Empty<Photo>();
+        }
+    }
+
+    public async Task<Photo?> GetAsync(Guid photoId)
+    {
+        try
+        {
+            using var conn = _factory.Create();
+
+            var sql = @"SELECT * FROM Photos WHERE Id = @Id;";
+
+            return await conn.QuerySingleOrDefaultAsync<Photo>(sql, new { Id = photoId.ToString() });
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return null;
         }
     }
 }

@@ -26,10 +26,14 @@ public static class DependencyInjection
         services.AddTransient<PlantFormPage>();
         services.AddTransient<PlantFormViewModel>();
 
+        services.AddTransient<PhotoFormViewModel>();
+        services.AddTransient<PhotoViewModel>();
+
         services.AddTransient<INavigationService, NavigationService>();
         services.AddTransient<IMapper, Mapper>();
         services.AddTransient<IPlantViewModelFactory, PlantViewModelFactory>();
         services.AddTransient<INoteFactory, NoteFactory>();
+        services.AddTransient<IPhotoFactory, PhotoFactory>();
 
         services.AddSingleton<ISqliteConnectionFactory>(new SqliteConnectionFactory(Path.Combine(FileSystem.AppDataDirectory, "WaterMyPlantsDb.db")));
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:WaterMyPlants.UI.ViewModels"
+             x:DataType="vm:PhotoFormViewModel"
+             x:Class="WaterMyPlants.UI.Views.PhotoFormView">
+    <Frame Padding="20" Margin="10">
+        <Grid RowDefinitions="auto, *, auto">
+            <Image Source="{Binding Photo}" Aspect="AspectFit"/> 
+
+            <Entry Grid.Row="1" Placeholder="Treść notatki..."
+                Text="{Binding PhotoName}"
+                HeightRequest="100"
+                Margin="20,0,20,10"/>
+
+            <Grid Grid.Row="2" ColumnDefinitions="*,*">
+                <Button Text="Anuluj"
+                    Margin="20,0,0,20"
+                    Command="{Binding CancelCommand}"
+                    Style="{StaticResource Cancel}"/>
+                <Button Grid.Column="1"
+                    Text="Zapisz zdjęcie"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Command="{Binding SaveCommand}"
+                    Margin="20,0,20,20"/>
+            </Grid>
+        </Grid>
+    </Frame>
+</ContentView>

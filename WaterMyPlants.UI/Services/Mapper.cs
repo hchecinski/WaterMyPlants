@@ -64,6 +64,19 @@ public class Mapper : IMapper
         };
     }
 
+    public PhotoModel ToModel(PhotoDto photo)
+    {
+        return new PhotoModel
+        {
+            Id = photo.Id,
+            PlantId = photo.PlantId,
+            CreatedAt = photo.CreatedAt,
+            Name = photo.Name,
+            Path = photo.Path,
+            UpdatedAt = photo?.UpdatedAt
+        };
+    }
+
     public UpdatePlantDto ToUpdatePlantDto(PlantDetailsModel model)
     {
         return new UpdatePlantDto

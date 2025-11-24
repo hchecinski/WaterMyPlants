@@ -6,7 +6,7 @@
              x:DataType="vm:NoteFormViewModel"
              x:Class="WaterMyPlants.UI.Views.NoteFormView">
     <Frame Padding="20" Margin="10">
-        <Grid Grid.Row="2" RowDefinitions="*, auto">
+        <Grid RowDefinitions="*, auto">
             <Editor Placeholder="Treść notatki..."
                     Text="{Binding NoteText}"
                     AutoSize="TextChanges"

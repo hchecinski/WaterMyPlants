@@ -17,6 +17,19 @@ public class Mapper : IMapper
         };
     }
 
+    public PhotoDto ToPhotoListItem(Photo photo)
+    {
+        return new PhotoDto()
+        {
+            Id = Guid.Parse(photo.Id),
+            CreatedAt = photo.CreatedAt,
+            UpdatedAt = photo.LastUpdatedAt,
+            Name = photo.Name,
+            Path = photo.Path,
+            PlantId = Guid.Parse(photo.PlantId)
+        };
+    }
+
     public PlantDetailsDto ToPlantDetailsDto(Plant dto)
     {
         if(!Guid.TryParse( dto.Id, out var id))

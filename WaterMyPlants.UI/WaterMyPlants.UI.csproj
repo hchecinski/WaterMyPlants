@@ -18,7 +18,10 @@
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
-
+		
+		<AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
+		<MauiAndroidManifest>Platforms/Android/AndroidManifest.xml</MauiAndroidManifest>
+		
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
@@ -69,6 +72,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\NoteFormView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\PhotoFormView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\PlantFormPage.xaml">
