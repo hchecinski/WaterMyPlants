@@ -78,6 +78,11 @@ public class Plant : UpdatableEntity
         }
     }
 
+    public void Water()
+    {
+        LastWaterAt = DateTime.Now;
+    }
+
     public Plant(string name, int waterIntervalDays, string? localization = null, string? description = null)
     {
         Name = name;

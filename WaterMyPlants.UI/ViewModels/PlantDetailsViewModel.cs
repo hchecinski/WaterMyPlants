@@ -3,8 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using WaterMyPlants.Application.Models;
-using WaterMyPlants.Application.Services;
+using WaterMyPlants.Shared.Models;
 using WaterMyPlants.UI.Factories;
 using WaterMyPlants.UI.Models;
 using WaterMyPlants.UI.Services;
@@ -12,7 +11,7 @@ using WaterMyPlants.UI.Services;
 namespace WaterMyPlants.UI.ViewModels;
 
 [QueryProperty(nameof(Model), "Model")]
-public partial class PlantDetailsViewModel : ObservableObject
+public partial class PlantDetailsViewModel : ObservableObject, IDisposable
 {
     private readonly INavigationService _navigationService;
     private readonly IPlantService _plantService;
@@ -63,7 +62,11 @@ public partial class PlantDetailsViewModel : ObservableObject
 
     [ObservableProperty]
     private ObservableCollection<PhotoModel> _photos = new();
+    private bool disposedValue;
 
+    public bool IsPhotosVisible => Photos.Any();
+
+    public bool IsNotesVisible => Notes.Any();
 
     partial void OnModelChanged(PlantDetailsModel value)
     {
@@ -78,6 +81,9 @@ public partial class PlantDetailsViewModel : ObservableObject
         NextWaterAt = value.NextWaterAt;
         Notes = value.Notes?.ToObservableCollection() ?? new ObservableCollection<NoteModel>();
         Photos = value.Photos?.ToObservableCollection() ?? new ObservableCollection<PhotoModel>();
+
+        OnPropertyChanged(nameof(IsPhotosVisible));
+        OnPropertyChanged(nameof(IsNotesVisible));
     }
 
     public PlantDetailsViewModel(INavigationService navigationService, IPlantService plantService, INoteService noteService, IPhotoService photoService, IMapper mapper, INoteFactory noteFactory, IPhotoFactory photoFactory)
@@ -89,6 +95,19 @@ public partial class PlantDetailsViewModel : ObservableObject
         _noteFactory = noteFactory;
         _photoFactory = photoFactory;
         _photoService = photoService;
+
+        Notes.CollectionChanged += Notes_CollectionChanged;
+        Photos.CollectionChanged += Photos_CollectionChanged;
+    }
+
+    private void Photos_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(IsPhotosVisible));
+    }
+
+    private void Notes_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(IsNotesVisible));
     }
 
     private async Task WaterAsync()
@@ -104,6 +123,7 @@ public partial class PlantDetailsViewModel : ObservableObject
 
 
         NoteEditorViewModel = _noteFactory.CreateNoteFormViewModel(Model.Id, RefreshNotes, CancelEditors);
+        OnPropertyChanged(nameof(IsNotesVisible));
     }
 
     private async Task AddPhotoAsync()
@@ -250,6 +270,8 @@ public partial class PlantDetailsViewModel : ObservableObject
 
         await _noteService.DeleteNoteAsync(noteModel.Id);
         await RefreshNotes();
+
+        OnPropertyChanged(nameof(IsNotesVisible));
     }
 
     [RelayCommand]
@@ -275,6 +297,8 @@ public partial class PlantDetailsViewModel : ObservableObject
 
         await _photoService.DeletePhotoAsync(photoModel.Id);
         await RefreshPhotos();
+
+        OnPropertyChanged(nameof(IsPhotosVisible));
     }
 
     [RelayCommand]
@@ -285,5 +309,27 @@ public partial class PlantDetailsViewModel : ObservableObject
         IsVisibleNoteEditor = false;
 
         PhotoFormViewModel = _photoFactory.CreatePhotoFormViewModel(photoModel, RefreshPhotos, CancelEditors);
+
+        OnPropertyChanged(nameof(IsPhotosVisible));
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+            }
+
+            Notes.CollectionChanged -= Notes_CollectionChanged;
+            Photos.CollectionChanged -= Photos_CollectionChanged;
+            disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

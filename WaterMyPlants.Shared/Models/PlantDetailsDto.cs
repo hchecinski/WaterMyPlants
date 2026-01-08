@@ -1,4 +1,4 @@
-﻿namespace WaterMyPlants.Application.Models;
+﻿namespace WaterMyPlants.Shared.Models;
 
 public class PlantDetailsDto
 {

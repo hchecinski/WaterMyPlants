@@ -53,8 +53,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\WaterMyPlants.Application\WaterMyPlants.Application.csproj" />
-	  <ProjectReference Include="..\WaterMyPlants.Infrastructure\WaterMyPlants.Infrastructure.csproj" />
+	  <ProjectReference Include="..\WaterMyPlants.Shared\WaterMyPlants.Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

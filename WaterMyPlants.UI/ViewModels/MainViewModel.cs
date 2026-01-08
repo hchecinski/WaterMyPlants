@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using WaterMyPlants.Application.Services;
 using WaterMyPlants.UI.Factories;
 using WaterMyPlants.UI.Services;
 
@@ -15,6 +14,8 @@ public partial class MainViewModel : ObservableObject
     private readonly IPlantViewModelFactory _factory;
     private readonly INavigationService _navigator;
 
+    private CancellationTokenSource _wateringToken;
+
     [ObservableProperty]
     ObservableCollection<PlantListItemViewModel> _plants = new();
 
@@ -24,6 +25,8 @@ public partial class MainViewModel : ObservableObject
         _mapper = mapper;
         _factory = plantViewModelFactory;
         _navigator = navigationService;
+
+        _wateringToken = new CancellationTokenSource();
     }
 
     public async Task OnAppearing()
@@ -67,5 +70,24 @@ public partial class MainViewModel : ObservableObject
     private async Task AddPlant()
     {
         await _navigator.NavigateToPlantFormPage();
+    }
+
+    [RelayCommand]
+    private async Task WaterPlant(PlantListItemViewModel model)
+    {
+        var result = await Shell.Current.DisplayAlert("Podlewanie", $"Czy na pewno chcesz podlać roślinkę {model.Name}?", "Tak", "Anuluj");
+        if (!result)
+        {
+            return;
+        }
+        await _plantService.WaterNowAsync(model.Model.Id);
+        await OnAppearing();
+    }
+
+    [RelayCommand]
+    private  async Task CancelWateringPlan()
+    {
+        await _wateringToken.CancelAsync();
+        _wateringToken = new CancellationTokenSource();
     }
 }

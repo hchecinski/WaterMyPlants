@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:WaterMyPlants.UI.ViewModels"
              xmlns:views="clr-namespace:WaterMyPlants.UI.Views"
@@ -12,7 +11,18 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <views:PlantListItemView />
+                    <SwipeView>
+                        <SwipeView.LeftItems>
+                            <SwipeItems Mode="Reveal">
+                                <SwipeItem
+                                    Text="Podlane"
+                                    BackgroundColor="DarkSeaGreen"
+                                    Command="{Binding BindingContext.WaterPlantCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                    CommandParameter="{Binding .}" />
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+                        <views:PlantListItemView />
+                    </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
 

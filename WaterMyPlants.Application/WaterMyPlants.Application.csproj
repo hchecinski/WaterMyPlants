@@ -12,6 +12,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WaterMyPlants.Domain\WaterMyPlants.Domain.csproj" />
+    <ProjectReference Include="..\WaterMyPlants.Shared\WaterMyPlants.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

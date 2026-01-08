@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using WaterMyPlants.Application.Models;
-using WaterMyPlants.Application.Services;
+using WaterMyPlants.Shared.Models;
 using WaterMyPlants.UI.Services;
 
 namespace WaterMyPlants.UI.ViewModels;
@@ -74,7 +73,7 @@ public partial class PlantFormViewModel : ObservableObject
 
     private async Task<UpdatablePlantDto?> GetPlantAsync()
     {
-        if (Model == null)
+        if (Model is null)
         {
             return null;
         }
@@ -93,7 +92,7 @@ public partial class PlantFormViewModel : ObservableObject
 
     internal void OnAppearing()
     {
-        if (Model == null)
+        if (Model is null)
         {
             return;
         }

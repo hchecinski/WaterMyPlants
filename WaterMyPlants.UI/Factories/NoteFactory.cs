@@ -1,5 +1,4 @@
-﻿using WaterMyPlants.Domain.Models;
-using WaterMyPlants.UI.Models;
+﻿using WaterMyPlants.UI.Models;
 using WaterMyPlants.UI.ViewModels;
 
 namespace WaterMyPlants.UI.Factories;

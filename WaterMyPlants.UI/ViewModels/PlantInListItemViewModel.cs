@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
-using WaterMyPlants.Application.Services;
 using WaterMyPlants.UI.Factories;
 using WaterMyPlants.UI.Models;
 using WaterMyPlants.UI.Services;

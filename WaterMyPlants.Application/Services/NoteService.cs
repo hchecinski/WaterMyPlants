@@ -1,7 +1,6 @@
-﻿
-using WaterMyPlants.Application.Models;
-using WaterMyPlants.Domain.Models;
+﻿using WaterMyPlants.Domain.Models;
 using WaterMyPlants.Domain.Repositories;
+using WaterMyPlants.Shared.Models;
 
 namespace WaterMyPlants.Application.Services;
 
@@ -49,5 +48,10 @@ public class NoteService : INoteService
 
         note.Updated(text);
         await _noteRepository.UpdateAsync(note);
+    }
+
+    Task<IEnumerable<NoteDto>> INoteService.GetNotes(Guid id)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using WaterMyPlants.Application.Services;
 using WaterMyPlants.UI.Models;
+using WaterMyPlants.UI.Services;
 
 namespace WaterMyPlants.UI.ViewModels;
 

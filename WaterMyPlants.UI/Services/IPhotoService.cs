@@ -1,6 +1,6 @@
 ﻿using WaterMyPlants.Shared.Models;
 
-namespace WaterMyPlants.Application.Services;
+namespace WaterMyPlants.UI.Services;
 
 public interface IPhotoService
 {

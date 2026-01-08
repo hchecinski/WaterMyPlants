@@ -1,6 +1,7 @@
-﻿using WaterMyPlants.Application.Models;
+﻿using System.Diagnostics;
 using WaterMyPlants.Domain.Models;
 using WaterMyPlants.Domain.Repositories;
+using WaterMyPlants.Shared.Models;
 
 namespace WaterMyPlants.Application.Services;
 
@@ -34,7 +35,7 @@ public class PlantService : IPlantService
     {
         var plant = await _plantRepository.GetAsync(id);
 
-        if(plant == null)
+        if (plant == null)
         {
             throw new KeyNotFoundException($"Plant with id '{id}' was not found.");
         }
@@ -84,8 +85,29 @@ public class PlantService : IPlantService
         await _plantRepository.UpdateAsync(plant);
     }
 
-    public Task WaterNowAsync(Guid id, DateTime nowUtc)
+    public async Task WaterNowAsync(Guid id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var plant = await _plantRepository.GetAsync(id);
+            if (plant == null)
+            {
+                throw new KeyNotFoundException($"Plant with id '{id}' was not found.");
+            }
+
+            plant.Validate();
+            plant.Water();
+
+            if(plant.LastWaterAt is null)
+            {
+                throw new Exception("LastWaterAt cannot be null after watering the plant.");
+            }
+
+            await _plantRepository.WaterAsync(Guid.Parse(plant.Id), plant.LastWaterAt.Value);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"ERROR watering plant {id}: {ex.Message}");
+        }
     }
 }

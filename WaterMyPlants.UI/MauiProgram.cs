@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using WaterMyPlants.Application;
-using WaterMyPlants.Infrastructure;
 
 namespace WaterMyPlants.UI;
 public static class MauiProgram
@@ -26,8 +25,6 @@ public static class MauiProgram
         Task.Run(InitializeDatabase).Wait();
 
         builder.Services.AddUIServices();
-        builder.Services.AddApplicationServices();
-        builder.Services.AddInfrastructureServices();
 
         return builder.Build();
     }

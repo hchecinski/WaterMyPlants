@@ -18,7 +18,7 @@
                 <Label Text="{Binding CreatedAt, StringFormat='Data dodania: {0:dd.MM.yyyy}'}" FontSize="14" />
                 <Label Text="{Binding LastWaterAt, StringFormat='Ostatnie podlewanie: {0:dd.MM.yyyy}'}" FontSize="14" />
                 <Label Text="{Binding NextWaterAt, StringFormat='Podlej w: {0:dd.MM.yyyy}'}" FontSize="14" />
-                <Label Text="Notatki:" FontSize="18" />
+                <Label Text="Notatki:" FontSize="18" IsVisible="{Binding IsNotesVisible}"/>
 
                 <CollectionView ItemsSource="{Binding Notes}" 
                                 SelectionMode="None">
@@ -53,7 +53,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <Label Text="Zdjęcia:" FontSize="18" />
+                <Label Text="Zdjęcia:" FontSize="18" IsVisible="{Binding IsPhotosVisible}" />
 
                 <CollectionView ItemsSource="{Binding Photos}">
                     <CollectionView.ItemTemplate>

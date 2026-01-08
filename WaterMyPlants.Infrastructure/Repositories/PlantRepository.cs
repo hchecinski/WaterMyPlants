@@ -177,11 +177,13 @@ public class PlantRepository : IPlantRepository
             const string sql = """
                 UPDATE Plants
                 SET 
-                    LastWaterAt = @NowUtc,
+                    LastWaterAt = @NowUtc
                 WHERE Id = @Id;
             """;
 
-            await conn.ExecuteAsync(sql, new { Id = id, NowUtc = nowUtc });
+            DateTime? lastWatered = nowUtc;
+
+            await conn.ExecuteAsync(sql, new { Id = id, NowUtc = lastWatered });
         }
         catch (Exception ex)
         {

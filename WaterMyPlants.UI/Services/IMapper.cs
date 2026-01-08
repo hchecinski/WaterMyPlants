@@ -1,4 +1,4 @@
-﻿using WaterMyPlants.Application.Models;
+﻿using WaterMyPlants.Shared.Models;
 using WaterMyPlants.UI.Models;
 using WaterMyPlants.UI.ViewModels;
 

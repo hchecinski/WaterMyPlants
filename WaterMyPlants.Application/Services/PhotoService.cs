@@ -1,7 +1,6 @@
-﻿using System.Net.NetworkInformation;
-using WaterMyPlants.Application.Models;
-using WaterMyPlants.Domain.Models;
+﻿using WaterMyPlants.Domain.Models;
 using WaterMyPlants.Domain.Repositories;
+using WaterMyPlants.Shared.Models;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace WaterMyPlants.Application.Services;

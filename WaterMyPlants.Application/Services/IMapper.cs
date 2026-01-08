@@ -1,5 +1,5 @@
-﻿using WaterMyPlants.Application.Models;
-using WaterMyPlants.Domain.Models;
+﻿using WaterMyPlants.Domain.Models;
+using WaterMyPlants.Shared.Models;
 
 namespace WaterMyPlants.Application.Services;
 

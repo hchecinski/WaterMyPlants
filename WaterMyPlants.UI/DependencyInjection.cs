@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Maui;
-using WaterMyPlants.Infrastructure.DataBase;
 using WaterMyPlants.UI.Factories;
 using WaterMyPlants.UI.Services;
 using WaterMyPlants.UI.ViewModels;
@@ -30,12 +29,15 @@ public static class DependencyInjection
         services.AddTransient<PhotoViewModel>();
 
         services.AddTransient<INavigationService, NavigationService>();
+        services.AddTransient<IPlantService, PlantService>();
+        services.AddTransient<INoteService, NoteService>();
+        services.AddTransient<IPhotoService, PhotoService>();
+
         services.AddTransient<IMapper, Mapper>();
         services.AddTransient<IPlantViewModelFactory, PlantViewModelFactory>();
         services.AddTransient<INoteFactory, NoteFactory>();
         services.AddTransient<IPhotoFactory, PhotoFactory>();
 
-        services.AddSingleton<ISqliteConnectionFactory>(new SqliteConnectionFactory(Path.Combine(FileSystem.AppDataDirectory, "WaterMyPlantsDb.db")));
 
         return services;
     }
