@@ -53,6 +53,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\WaterMyPlants.Connector\WaterMyPlants.Connector.csproj" />
 	  <ProjectReference Include="..\WaterMyPlants.Shared\WaterMyPlants.Shared.csproj" />
 	</ItemGroup>
 
