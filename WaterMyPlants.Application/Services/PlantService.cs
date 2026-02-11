@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 using WaterMyPlants.Domain.Exceptions;
 using WaterMyPlants.Domain.Models;
 using WaterMyPlants.Domain.Repositories;
@@ -9,13 +8,11 @@ namespace WaterMyPlants.Application.Services;
 
 public class PlantService : IPlantService
 {
-    private readonly ILogger<PlantService> _logger;
     private readonly IPlantRepository _plantRepository;
     private readonly IMapper _mapper;
 
-    public PlantService(ILogger<PlantService> logger, IPlantRepository plantRepository, IMapper mapper)
+    public PlantService(IPlantRepository plantRepository, IMapper mapper)
     {
-        _logger = logger;
         _plantRepository = plantRepository;
         _mapper = mapper;
     }
@@ -29,6 +26,21 @@ public class PlantService : IPlantService
         return plant.Id;
     }
 
+    public async Task<Guid> AddNoteAsync(Guid plantId, CreateNoteDto note)
+    {
+        var plant = await _plantRepository.GetAsync(plantId);
+        if (plant == null)
+        {
+            throw new NotFoundException($"Plant with id '{plantId}' was not found.");
+        }
+
+        var noteId = Guid.NewGuid();
+        plant.AddNote(noteId, DateTime.UtcNow, note.Text);
+        await _plantRepository.AddNoteAsync(plant.Notes.FirstOrDefault(i => i.Id == noteId)!);
+
+        return noteId;
+    }
+
     public async Task DeleteAsync(Guid id)
     {
         var plant = await _plantRepository.GetAsync(id);
@@ -38,6 +50,18 @@ public class PlantService : IPlantService
             throw new NotFoundException($"Plant with id '{id}' was not found.");
         }
         await _plantRepository.RemoveAsync(plant);
+    }
+
+    public async Task DeleteNoteAsync(Guid plantId, Guid id)
+    {
+        var plant = await _plantRepository.GetAsync(plantId);
+        if (plant == null)
+        {
+            throw new NotFoundException($"Plant with id '{plantId}' was not found.");
+        }
+
+        plant.RemoveNote(id);
+        await _plantRepository.SaveAsync();
     }
 
     public async Task<PlantDetailsDto> GetDetailsAsync(Guid id)
@@ -50,6 +74,24 @@ public class PlantService : IPlantService
         }
 
         return _mapper.ToPlantDetailsDto(plant);
+    }
+
+    public async Task<NoteDto> GetNoteById(Guid plantId, Guid id)
+    {
+        var note = await _plantRepository.GetNoteByIdAsync(plantId, id);
+        if(note == null)
+        {
+            throw new NotFoundException($"Note with id '{id}' for plant with id '{plantId}' was not found.");
+        }
+
+        return _mapper.ToNoteDto(note);
+    }
+
+    public async Task<IReadOnlyList<NoteDto>> GetNotesAsync(Guid plantId)
+    {
+        var notes =  await _plantRepository.GetNotesAsync(plantId);
+
+        return notes.Select(_mapper.ToNoteDto).ToList();
     }
 
     public async Task<IReadOnlyList<PlantListItemDto>> GetSortedAsync()
@@ -91,21 +133,27 @@ public class PlantService : IPlantService
         await _plantRepository.SaveAsync();
     }
 
+    public async Task UpdateNoteAsync(Guid plantId, Guid id, UpdateNoteDto note)
+    {
+        var plant = await _plantRepository.GetAsync(plantId);
+        if (plant == null)
+        {
+            throw new NotFoundException($"Plant with id '{plantId}' was not found.");
+        }
+
+        plant.UpdateNote(id, note.Text, DateTime.UtcNow);
+        await _plantRepository.SaveAsync();
+    }
+
     public async Task WaterNowAsync(Guid id)
     {
         var plant = await _plantRepository.GetAsync(id);
         if (plant == null)
         {
-            throw new KeyNotFoundException($"Plant with id '{id}' was not found.");
+            throw new NotFoundException($"Plant with id '{id}' was not found.");
         }
 
         plant.Water(DateTime.UtcNow);
-
-        if (plant.LastWaterAt is null)
-        {
-            throw new Exception("LastWaterAt cannot be null after watering the plant.");
-        }
-
         await _plantRepository.SaveAsync();
     }
 }

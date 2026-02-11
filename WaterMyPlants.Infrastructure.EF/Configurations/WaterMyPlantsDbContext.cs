@@ -29,7 +29,7 @@ public class WaterMyPlantsDbContext : DbContext
         builder.Property(p => p.Path).IsRequired().HasMaxLength(500);
         builder.Property(p => p.Name).IsRequired().HasMaxLength(200);
         builder.Property(p => p.CreatedAt).IsRequired();
-        builder.Property<Guid>("PlantId").IsRequired();
+        builder.Property(p => p.PlantId).IsRequired();
 
         builder.HasIndex(p => p.Name).IsUnique();
     }
@@ -42,7 +42,7 @@ public class WaterMyPlantsDbContext : DbContext
         builder.HasKey(n => n.Id);
         builder.Property(n => n.Text).IsRequired().HasMaxLength(500);
         builder.Property(n => n.CreatedAt).IsRequired();
-        builder.Property<Guid>("PlantId").IsRequired();
+        builder.Property(n => n.PlantId).IsRequired();
     }
 
     private void ConfigurePlant(ModelBuilder modelBuilder)
@@ -57,11 +57,11 @@ public class WaterMyPlantsDbContext : DbContext
         builder.Property(p => p.WaterIntervalDays).IsRequired();
         builder.Property(p => p.CreatedAt).IsRequired();
 
-        builder.HasMany<Note>("_notes").WithOne().HasForeignKey("PlantId").OnDelete(DeleteBehavior.Cascade);
-        builder.HasMany<Photo>("_photos").WithOne().HasForeignKey("PlantId").OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(p => p.Notes).WithOne(p => p.Plant).HasForeignKey(n => n.PlantId).OnDelete(DeleteBehavior.Cascade);
+        builder.Navigation(p => p.Notes).UsePropertyAccessMode(PropertyAccessMode.Field);
 
-        builder.Metadata.FindNavigation(nameof(Plant.Notes))!.SetPropertyAccessMode(PropertyAccessMode.Field);
-        builder.Metadata.FindNavigation(nameof(Plant.Photos))!.SetPropertyAccessMode(PropertyAccessMode.Field);
+        builder.HasMany(p => p.Photos).WithOne(p => p.Plant).HasForeignKey(p => p.PlantId).OnDelete(DeleteBehavior.Cascade);
+        builder.Navigation(p => p.Photos).UsePropertyAccessMode(PropertyAccessMode.Field);
 
         builder.HasIndex(p => p.Name).IsUnique();
     }

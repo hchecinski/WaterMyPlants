@@ -23,12 +23,12 @@ public sealed class Plant
 
     public void AddNote(Guid noteId, DateTime createAt, string text)
     {
-        _notes.Add(Note.Create(noteId, createAt, text));
+        _notes.Add(Note.Create(noteId, Id, createAt, text));
     }
 
     public void AddPhoto(Guid photoId, string path, string name, DateTime createAt)
     {
-        _photos.Add(Photo.Create(photoId, path, name, createAt));
+        _photos.Add(Photo.Create(photoId, Id, path, name, createAt));
     }
 
     public void RemoveNote(Guid noteId)

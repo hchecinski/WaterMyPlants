@@ -10,8 +10,6 @@ public static class DependencyInjection
         services.AddTransient<IMapper, Mapper>();
 
         services.AddTransient<IPlantService, PlantService>();
-        services.AddTransient<INoteService, NoteService>();
-        services.AddTransient<IPhotoService, PhotoService>();
 
         return services;
     }

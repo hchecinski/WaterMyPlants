@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WaterMyPlants.Infrastructure.EF.Configurations;
@@ -11,9 +12,11 @@ using WaterMyPlants.Infrastructure.EF.Configurations;
 namespace WaterMyPlants.Infrastructure.EF.Migrations
 {
     [DbContext(typeof(WaterMyPlantsDbContext))]
-    partial class WaterMyPlantsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260211144957_ChancedBuilderSystem")]
+    partial class ChancedBuilderSystem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,24 +128,20 @@ namespace WaterMyPlants.Infrastructure.EF.Migrations
 
             modelBuilder.Entity("WaterMyPlants.Domain.Models.Note", b =>
                 {
-                    b.HasOne("WaterMyPlants.Domain.Models.Plant", "Plant")
+                    b.HasOne("WaterMyPlants.Domain.Models.Plant", null)
                         .WithMany("Notes")
                         .HasForeignKey("PlantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Plant");
                 });
 
             modelBuilder.Entity("WaterMyPlants.Domain.Models.Photo", b =>
                 {
-                    b.HasOne("WaterMyPlants.Domain.Models.Plant", "Plant")
+                    b.HasOne("WaterMyPlants.Domain.Models.Plant", null)
                         .WithMany("Photos")
                         .HasForeignKey("PlantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Plant");
                 });
 
             modelBuilder.Entity("WaterMyPlants.Domain.Models.Plant", b =>

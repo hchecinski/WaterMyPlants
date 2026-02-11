@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WaterMyPlants.Application.Services;
+using WaterMyPlants.Domain.Models;
 using WaterMyPlants.Shared.Dtos;
 
 namespace WaterMyPlants.Api.Controllers;
@@ -10,6 +11,7 @@ public class PlantController : ControllerBase
 {
     private readonly IPlantService _plantService;
 
+    #region Plants
     public PlantController(IPlantService plantService)
     {
         _plantService = plantService;
@@ -52,4 +54,42 @@ public class PlantController : ControllerBase
         await _plantService.UpdateAsync(id, plant);
         return NoContent();
     }
+    #endregion
+
+    #region Notes
+    [HttpPost("{plantId:guid}/notes")]
+    public async Task<IActionResult> AddNoteAsync(Guid plantId, [FromBody] CreateNoteDto note)
+    {
+        var noteId = await _plantService.AddNoteAsync(plantId, note);
+        return CreatedAtRoute(nameof(GetNoteById), new { plantId = plantId, id = noteId }, new { id = noteId });
+    }
+
+    [HttpGet("{plantId:guid}/notes/{id:guid}", Name = nameof(GetNoteById))]
+    public async Task<ActionResult<NoteDto>> GetNoteById(Guid plantId, Guid id)
+    {
+        var note = await _plantService.GetNoteById(plantId, id);
+        return Ok(note);
+    }
+
+    [HttpGet("{plantId:guid}/notes")]
+    public async Task<ActionResult<IReadOnlyList<NoteDto>>> GetNotesAsync(Guid plantId)
+    {
+        var notes = await _plantService.GetNotesAsync(plantId);
+        return Ok(notes);
+    }
+
+    [HttpDelete("{plantId:guid}/notes/{id:guid}")]
+    public async Task<IActionResult> DeleteNoteAsync(Guid plantId, Guid id)
+    {
+        await _plantService.DeleteNoteAsync(plantId, id);
+        return NoContent();
+    }
+
+    [HttpPut("{plantId:guid}/notes/{id:guid}")]
+    public async Task<IActionResult> UpdateNoteAsync(Guid plantId, Guid id, [FromBody] UpdateNoteDto note)
+    {
+        await _plantService.UpdateNoteAsync(plantId, id, note);
+        return NoContent();
+    }
+    #endregion
 }
