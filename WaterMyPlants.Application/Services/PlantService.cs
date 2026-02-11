@@ -1,34 +1,43 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.Extensions.Logging;
+using System.Diagnostics;
+using WaterMyPlants.Domain.Exceptions;
 using WaterMyPlants.Domain.Models;
 using WaterMyPlants.Domain.Repositories;
-using WaterMyPlants.Shared.Models;
+using WaterMyPlants.Shared.Dtos;
 
 namespace WaterMyPlants.Application.Services;
 
 public class PlantService : IPlantService
 {
+    private readonly ILogger<PlantService> _logger;
     private readonly IPlantRepository _plantRepository;
     private readonly IMapper _mapper;
 
-    public PlantService(IPlantRepository plantRepository, IMapper mapper)
+    public PlantService(ILogger<PlantService> logger, IPlantRepository plantRepository, IMapper mapper)
     {
+        _logger = logger;
         _plantRepository = plantRepository;
         _mapper = mapper;
     }
 
     public async Task<Guid> AddAsync(CreatePlantDto createPlantDto)
     {
-        Plant plant = new Plant(createPlantDto.Name, createPlantDto.WaterIntervalDays, createPlantDto.Localization, createPlantDto.Description);
-        plant.CreateNew();
+        Plant plant = Plant.Create(Guid.NewGuid(), createPlantDto.Name, createPlantDto.WaterIntervalDays, DateTime.UtcNow, createPlantDto.Localization, createPlantDto.Description);
 
-        await _plantRepository.InsertAsync(plant);
+        await _plantRepository.AddAsync(plant);
 
-        return Guid.Parse(plant.Id);
+        return plant.Id;
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        await _plantRepository.DeleteAsync(id);
+        var plant = await _plantRepository.GetAsync(id);
+
+        if (plant is null)
+        {
+            throw new NotFoundException($"Plant with id '{id}' was not found.");
+        }
+        await _plantRepository.RemoveAsync(plant);
     }
 
     public async Task<PlantDetailsDto> GetDetailsAsync(Guid id)
@@ -37,7 +46,7 @@ public class PlantService : IPlantService
 
         if (plant == null)
         {
-            throw new KeyNotFoundException($"Plant with id '{id}' was not found.");
+            throw new NotFoundException($"Plant with id '{id}' was not found.");
         }
 
         return _mapper.ToPlantDetailsDto(plant);
@@ -58,10 +67,8 @@ public class PlantService : IPlantService
 
         if (plant == null)
         {
-            throw new KeyNotFoundException($"Plant with id '{value}' was not found.");
+            throw new NotFoundException($"Plant with id '{value}' was not found.");
         }
-
-        plant.Validate();
 
         return _mapper.ToUpdatablePlantDto(plant);
     }
@@ -71,43 +78,34 @@ public class PlantService : IPlantService
         throw new NotImplementedException();
     }
 
-    public async Task UpdateAsync(UpdatePlantDto plantDto)
+    public async Task UpdateAsync(Guid id, UpdatePlantDto plantDto)
     {
-        var plant = await _plantRepository.GetAsync(plantDto.Id);
+        var plant = await _plantRepository.GetAsync(id);
 
         if (plant == null)
         {
-            throw new KeyNotFoundException($"Plant with id '{plantDto.Id}' was not found.");
+            throw new NotFoundException($"Plant with id '{id}' was not found.");
         }
-        plant.Validate();
-        plant.Update(plantDto.Name, plantDto.Description, plantDto.Localization, plantDto.WaterIntervalDays);
 
-        await _plantRepository.UpdateAsync(plant);
+        plant.Update(plantDto.Name, plantDto.WaterIntervalDays, DateTime.UtcNow, plantDto.Description, plantDto.Localization);
+        await _plantRepository.SaveAsync();
     }
 
     public async Task WaterNowAsync(Guid id)
     {
-        try
+        var plant = await _plantRepository.GetAsync(id);
+        if (plant == null)
         {
-            var plant = await _plantRepository.GetAsync(id);
-            if (plant == null)
-            {
-                throw new KeyNotFoundException($"Plant with id '{id}' was not found.");
-            }
-
-            plant.Validate();
-            plant.Water();
-
-            if(plant.LastWaterAt is null)
-            {
-                throw new Exception("LastWaterAt cannot be null after watering the plant.");
-            }
-
-            await _plantRepository.WaterAsync(Guid.Parse(plant.Id), plant.LastWaterAt.Value);
+            throw new KeyNotFoundException($"Plant with id '{id}' was not found.");
         }
-        catch (Exception ex)
+
+        plant.Water(DateTime.UtcNow);
+
+        if (plant.LastWaterAt is null)
         {
-            Debug.WriteLine($"ERROR watering plant {id}: {ex.Message}");
+            throw new Exception("LastWaterAt cannot be null after watering the plant.");
         }
+
+        await _plantRepository.SaveAsync();
     }
 }

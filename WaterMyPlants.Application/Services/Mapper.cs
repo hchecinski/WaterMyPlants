@@ -1,5 +1,5 @@
 ﻿using WaterMyPlants.Domain.Models;
-using WaterMyPlants.Shared.Models;
+using WaterMyPlants.Shared.Dtos;
 
 namespace WaterMyPlants.Application.Services;
 
@@ -9,8 +9,8 @@ public class Mapper : IMapper
     {
         return new NoteDto()
         {
-            Id = Guid.Parse(note.Id),
-            PlantId = Guid.Parse(note.PlantId),
+            Id = note.Id,
+            PlantId = note.PlantId,
             CreatedAt = note.CreatedAt,
             LastUpdatedAt = note.LastUpdatedAt,
             Text = note.Text
@@ -21,25 +21,20 @@ public class Mapper : IMapper
     {
         return new PhotoDto()
         {
-            Id = Guid.Parse(photo.Id),
+            Id = photo.Id,
             CreatedAt = photo.CreatedAt,
             UpdatedAt = photo.LastUpdatedAt,
             Name = photo.Name,
             Path = photo.Path,
-            PlantId = Guid.Parse(photo.PlantId)
+            PlantId = photo.PlantId
         };
     }
 
     public PlantDetailsDto ToPlantDetailsDto(Plant dto)
     {
-        if(!Guid.TryParse( dto.Id, out var id))
-        {
-            throw new InvalidOperationException("Invalid Plant Id format.");
-        }
-
         return new PlantDetailsDto
         {
-            Id = id,
+            Id = dto.Id,
             Name = dto.Name,
             Localization = dto.Localization,
             Description = dto.Description,
@@ -50,15 +45,15 @@ public class Mapper : IMapper
                 : dto.CreatedAt.AddDays(dto.WaterIntervalDays),
             Notes = dto.Notes.Select(n => new NoteDto
             {
-                Id = Guid.Parse(n.Id),
+                Id = n.Id,
                 Text = n.Text,
                 LastUpdatedAt = n.LastUpdatedAt ?? n.CreatedAt,
                 CreatedAt = n.CreatedAt,
-                PlantId = id
+                PlantId = n.PlantId
             }),
             Photos = dto.Photos.Select(p => new PhotoDto
             {
-                Id = Guid.Parse(p.Id),
+                Id = p.Id,
                 Path = p.Path,
                 CreatedAt = p.CreatedAt
             })
@@ -69,7 +64,7 @@ public class Mapper : IMapper
     {
         return new PlantListItemDto
         {
-            Id = Guid.Parse(plant.Id),
+            Id = plant.Id,
             Name = plant.Name,
             Description = plant.Description,
             Localization = plant.Localization,

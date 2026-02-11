@@ -1,6 +1,12 @@
 @WaterMyPlants.Api_HostAddress = http://localhost:5008
 
-GET {{WaterMyPlants.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+### create
+POST /Plant
+
+### get by id
+GET /Plant/{{plantId}}
+
+### list
+GET /Plant
 
 ###

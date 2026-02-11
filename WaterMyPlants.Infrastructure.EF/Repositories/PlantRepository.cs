@@ -1,45 +1,43 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
 using WaterMyPlants.Domain.Models;
 using WaterMyPlants.Domain.Repositories;
+using WaterMyPlants.Infrastructure.EF.Configurations;
 
 namespace WaterMyPlants.Infrastructure.EF.Repositories;
 
 public class PlantRepository : IPlantRepository
 {
-    private readonly ILogger<PlantRepository> _logger;
+    private readonly WaterMyPlantsDbContext _dbContext;
 
-    public PlantRepository(ILogger<PlantRepository> logger)
+    public PlantRepository(WaterMyPlantsDbContext dbContext)
     {
-        _logger = logger;
+        _dbContext = dbContext;
     }
 
-    public Task DeleteAsync(Guid id)
+    public async Task AddAsync(Plant plant)
     {
-        throw new NotImplementedException();
+        _dbContext.Plants.Add(plant);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task<IEnumerable<Plant>> GetAllAsync()
+    public async Task<IReadOnlyList<Plant>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _dbContext.Plants.Include(p => p.Notes).Include(p => p.Photos).ToListAsync();
     }
 
-    public Task<Plant?> GetAsync(Guid id)
+    public async Task<Plant?> GetAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Plants.Include(p => p.Notes).Include(p => p.Photos).FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public Task InsertAsync(Plant entity)
+    public async Task RemoveAsync(Plant plant)
     {
-        throw new NotImplementedException();
+        _dbContext.Plants.Remove(plant);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task UpdateAsync(Plant entity)
+    public async Task SaveAsync()
     {
-        throw new NotImplementedException();
-    }
-
-    public Task WaterAsync(Guid id, DateTime nowUtc)
-    {
-        throw new NotImplementedException();
+        await _dbContext.SaveChangesAsync();
     }
 }

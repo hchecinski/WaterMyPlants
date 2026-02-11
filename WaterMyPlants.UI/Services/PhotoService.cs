@@ -1,4 +1,4 @@
-﻿using WaterMyPlants.Shared.Models;
+﻿using WaterMyPlants.Shared.Dtos;
 
 namespace WaterMyPlants.UI.Services;
 

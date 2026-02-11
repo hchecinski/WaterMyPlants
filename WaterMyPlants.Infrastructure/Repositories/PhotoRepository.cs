@@ -32,7 +32,7 @@ public class PhotoRepository : IPhotoRepository
         }
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
         try
         {
@@ -41,14 +41,18 @@ public class PhotoRepository : IPhotoRepository
             var sql = @"DELETE FROM Photos WHERE Id = @Id;";
 
             await conn.ExecuteAsync(sql, new { Id = id.ToString() });
+
+            return true;
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
         }
+
+        return false;
     }
 
-    public async Task UpdateAsync(Photo entity)
+    public async Task<bool> UpdateAsync(Photo entity)
     {
         try
         {
@@ -66,6 +70,8 @@ public class PhotoRepository : IPhotoRepository
         {
             Debug.WriteLine(ex.Message);
         }
+
+        return false;
     }
 
     public async Task<IEnumerable<Photo>> GetAllAsync(Guid plantId)

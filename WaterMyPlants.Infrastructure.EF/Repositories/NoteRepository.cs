@@ -5,7 +5,7 @@ namespace WaterMyPlants.Infrastructure.EF.Repositories;
 
 public class NoteRepository : INoteRepository
 {
-    public Task DeleteAsync(Guid id)
+    public Task<bool> DeleteAsync(Guid id)
     {
         throw new NotImplementedException();
     }
@@ -25,7 +25,7 @@ public class NoteRepository : INoteRepository
         throw new NotImplementedException();
     }
 
-    public Task UpdateAsync(Note entity)
+    public Task<bool> UpdateAsync(Note entity)
     {
         throw new NotImplementedException();
     }

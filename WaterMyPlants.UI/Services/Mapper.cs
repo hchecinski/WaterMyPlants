@@ -1,4 +1,4 @@
-﻿using WaterMyPlants.Shared.Models;
+﻿using WaterMyPlants.Shared.Dtos;
 using WaterMyPlants.UI.Models;
 
 namespace WaterMyPlants.UI.Services;
@@ -80,7 +80,6 @@ public class Mapper : IMapper
     {
         return new UpdatePlantDto
         {
-            Id = model.Id,
             Name = model.Name,
             Description = model.Description,
             Localization = model.Localization,

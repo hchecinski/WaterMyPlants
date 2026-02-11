@@ -2,9 +2,11 @@
 
 namespace WaterMyPlants.Domain.Repositories;
 
-public interface IPlantRepository : IUpdatableRepository<Plant>
+public interface IPlantRepository 
 {
     Task<Plant?> GetAsync(Guid id);
-    Task<IEnumerable<Plant>> GetAllAsync();
-    Task WaterAsync(Guid id, DateTime nowUtc);
+    Task<IReadOnlyList<Plant>> GetAllAsync();
+    Task AddAsync(Plant plant);
+    Task RemoveAsync(Plant plant);
+    Task SaveAsync();
 }

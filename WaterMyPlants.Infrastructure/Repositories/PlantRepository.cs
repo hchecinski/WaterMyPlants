@@ -37,11 +37,11 @@ public class PlantRepository : IPlantRepository
 
             foreach (var plant in plants)
             {
-                var plantNotes = notes.Where(n => n.PlantId.ToString() == plant.Id).ToList();
-                plant.CreateNotes(plantNotes);
+                var plantNotes = notes.Where(n => n.PlantId == plant.Id).ToList();
+                plant.ReplaceNotes(plantNotes);
 
-                var plantPhotos = photos.Where(p => p.PlantId.ToString() == plant.Id).ToList();
-                plant.CreatePhotos(plantPhotos);
+                var plantPhotos = photos.Where(p => p.PlantId == plant.Id).ToList();
+                plant.ReplacePhotos(plantPhotos);
             }
 
             return plants;
@@ -76,10 +76,10 @@ public class PlantRepository : IPlantRepository
             }
 
             var notes = (await multi.ReadAsync<Note>()).ToList();
-            plant.CreateNotes(notes);
+            plant.ReplaceNotes(notes);
 
             var photos = (await multi.ReadAsync<Photo>()).ToList();
-            plant.CreatePhotos(photos);
+            plant.ReplacePhotos(photos);
 
             return plant;
         }
@@ -125,7 +125,7 @@ public class PlantRepository : IPlantRepository
         }
     }
 
-    public async Task UpdateAsync(Plant entity)
+    public async Task<bool> UpdateAsync(Plant entity)
     {
         try
         {
@@ -148,9 +148,11 @@ public class PlantRepository : IPlantRepository
         {
             Debug.WriteLine(ex.Message);
         }
+
+        return false;
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
         try
         {
@@ -161,11 +163,15 @@ public class PlantRepository : IPlantRepository
             """;
 
             await conn.ExecuteAsync(sql, new { Id = id.ToString() });
+
+            return true;
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
         }
+
+        return false;
     }
 
     public async Task WaterAsync(Guid id, DateTime nowUtc)
@@ -189,5 +195,10 @@ public class PlantRepository : IPlantRepository
         {
             Debug.WriteLine(ex.Message);
         }
+    }
+
+    public Task<Plant> GetReadOnlyAsync(Guid id)
+    {
+        throw new NotImplementedException();
     }
 }

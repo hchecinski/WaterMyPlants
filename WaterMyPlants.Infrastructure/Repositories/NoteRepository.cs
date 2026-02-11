@@ -33,7 +33,7 @@ public class NoteRepository : INoteRepository
         }
     }
 
-    public async Task UpdateAsync(Note entity)
+    public async Task<bool> UpdateAsync(Note entity)
     {
         try
         {
@@ -51,9 +51,11 @@ public class NoteRepository : INoteRepository
         {
             Debug.WriteLine(ex.Message);
         }
+
+        return false;
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
         try
         {
@@ -62,11 +64,15 @@ public class NoteRepository : INoteRepository
             var sql = @"DELETE FROM Notes WHERE Id = @Id;";
 
             await conn.ExecuteAsync(sql, new { Id = id.ToString() });
+
+            return true;
         }
         catch(Exception ex)
         {
             Debug.WriteLine(ex.Message);
         }
+
+        return false;
     }
 
     public async Task<Note?> GetItemByIdAsync(Guid noteId)

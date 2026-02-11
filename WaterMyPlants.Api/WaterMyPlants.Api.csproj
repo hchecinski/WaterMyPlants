@@ -22,8 +22,4 @@
     <ProjectReference Include="..\WaterMyPlants.Infrastructure.EF\WaterMyPlants.Infrastructure.EF.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

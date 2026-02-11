@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using WaterMyPlants.Shared.Models;
+using WaterMyPlants.Shared.Dtos;
 using WaterMyPlants.UI.Services;
 
 namespace WaterMyPlants.UI.ViewModels;
@@ -35,11 +35,10 @@ public partial class PlantFormViewModel : ObservableObject
     [RelayCommand]
     private async Task Save()
     {
-        Guid id = Model?.Id ?? Guid.Empty;
+        //Guid id = Model?.Id ?? Guid.Empty;
 
         var plant = new UpdatePlantDto()
         {
-            Id = id,
             Name = Name,
             Localization = Localization,
             Description = Description,
@@ -47,18 +46,18 @@ public partial class PlantFormViewModel : ObservableObject
         };
 
 
-        if(id == Guid.Empty)
-        {
-            await _plantService.AddAsync(plant);
-            await _navigationService.GoBack();
-        }
-        else
-        {
-            await _plantService.UpdateAsync(plant);
-            var plantDetailsDto = await _plantService.GetDetailsAsync(id);
-            var plantDetailsModel = _mapper.ToModel(plantDetailsDto);
-            await _navigationService.BackToPlantDetailsPage(plantDetailsModel);
-        }
+        //if(id == Guid.Empty)
+        //{
+        //    await _plantService.AddAsync(plant);
+        //    await _navigationService.GoBack();
+        //}
+        //else
+        //{
+        //    await _plantService.UpdateAsync(plant);
+        //    var plantDetailsDto = await _plantService.GetDetailsAsync(id);
+        //    var plantDetailsModel = _mapper.ToModel(plantDetailsDto);
+        //    await _navigationService.BackToPlantDetailsPage(plantDetailsModel);
+        //}
 
     }
 
@@ -78,7 +77,8 @@ public partial class PlantFormViewModel : ObservableObject
             return null;
         }
 
-        return await _plantService.GetUpdatablePlantAsync(Model.Id);
+        //return await _plantService.GetUpdatablePlantAsync(Model.Id);
+        return null;
     }
 
     public void SetEditMode(string name, string? localization, string? description, int waterIntervalDays)

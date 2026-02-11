@@ -1,6 +1,5 @@
-﻿namespace WaterMyPlants.Shared.Models;
+﻿namespace WaterMyPlants.Shared.Dtos;
 
 public class UpdatePlantDto : CreatePlantDto
 {
-    public Guid Id { get; set; }
 }

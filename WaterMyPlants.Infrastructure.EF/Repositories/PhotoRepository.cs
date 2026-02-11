@@ -5,7 +5,7 @@ namespace WaterMyPlants.Infrastructure.EF.Repositories;
 
 public class PhotoRepository : IPhotoRepository
 {
-    public Task DeleteAsync(Guid id)
+    public Task<bool> DeleteAsync(Guid id)
     {
         throw new NotImplementedException();
     }
@@ -25,7 +25,7 @@ public class PhotoRepository : IPhotoRepository
         throw new NotImplementedException();
     }
 
-    public Task UpdateAsync(Photo entity)
+    public Task<bool> UpdateAsync(Photo entity)
     {
         throw new NotImplementedException();
     }

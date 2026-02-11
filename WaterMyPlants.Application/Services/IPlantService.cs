@@ -1,11 +1,11 @@
-﻿using WaterMyPlants.Shared.Models;
+﻿using WaterMyPlants.Shared.Dtos;
 
 namespace WaterMyPlants.Application.Services;
 
 public interface IPlantService
 {
     Task<Guid> AddAsync(CreatePlantDto createPlantDto);
-    Task UpdateAsync(UpdatePlantDto plantDto);
+    Task UpdateAsync(Guid id, UpdatePlantDto plantDto);
     Task DeleteAsync(Guid id);
     Task WaterNowAsync(Guid id);
     Task UndoWaterAsync(Guid id, DateTime previousUtc);

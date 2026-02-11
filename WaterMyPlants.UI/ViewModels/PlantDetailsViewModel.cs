@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using WaterMyPlants.Shared.Models;
+using WaterMyPlants.Shared.Dtos;
 using WaterMyPlants.UI.Factories;
 using WaterMyPlants.UI.Models;
 using WaterMyPlants.UI.Services;

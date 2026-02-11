@@ -1,18 +1,17 @@
-﻿
-using static System.Net.Mime.MediaTypeNames;
+﻿namespace WaterMyPlants.Domain.Models;
 
-namespace WaterMyPlants.Domain.Models;
-
-public class Photo : UpdatableEntity  
+public sealed class Photo  
 {
-    public string PlantId { get; set; }
-    public string Path { get; set; }
-    public string Name { get; set; }
+    public Guid Id { get; private set; }
+    public string Path { get; private set; } = string.Empty;
+    public string Name { get; private set; } = string.Empty;
+    public DateTime CreatedAt { get; private set; }
+    public DateTime? LastUpdatedAt { get; private set; }
 
     public Photo() { }
     public Photo(Guid id, DateTime createAt)
     {
-        Id = id.ToString();
+        Id = id;
         CreatedAt = createAt;
     }
 
@@ -20,5 +19,15 @@ public class Photo : UpdatableEntity
     {
         Name = newName;
         LastUpdatedAt = DateTime.UtcNow;
+    }
+
+    internal void Update(string name, DateTime updatedAt)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal static Photo Create(Guid photoId, string path, string name, DateTime createAt)
+    {
+        throw new NotImplementedException();
     }
 }
