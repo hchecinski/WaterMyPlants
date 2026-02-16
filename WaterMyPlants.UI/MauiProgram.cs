@@ -1,14 +1,14 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using WaterMyPlants.Application;
+using WaterMyPlants.Connector;
 
 namespace WaterMyPlants.UI;
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
-        SQLitePCL.Batteries_V2.Init();
-
         var builder = MauiApp.CreateBuilder();
         builder.UseMauiApp<App>()
             .ConfigureFonts(fonts =>
@@ -22,23 +22,13 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-        Task.Run(InitializeDatabase).Wait();
-
         builder.Services.AddUIServices();
-
+        builder.Services.AddHttpClient("clientName", client =>
+        {
+            client.BaseAddress = new Uri("http://10.0.2.2:5008/");
+            client.Timeout = TimeSpan.FromSeconds(10);
+        });
         return builder.Build();
     }
 
-    private static async Task InitializeDatabase()
-    {
-        var dbName = "WaterMyPlantsDb.db";
-        var dbPath = Path.Combine(FileSystem.AppDataDirectory, dbName);
-
-        if (!File.Exists(dbPath))
-        {
-            using var stream = await FileSystem.OpenAppPackageFileAsync(dbName);
-            using var outStream = File.Create(dbPath);
-            await stream.CopyToAsync(outStream);
-        }
-    }
 }

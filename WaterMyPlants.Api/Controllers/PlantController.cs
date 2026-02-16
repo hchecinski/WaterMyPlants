@@ -6,7 +6,7 @@ using WaterMyPlants.Shared.Dtos;
 namespace WaterMyPlants.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class PlantController : ControllerBase
 {
     private readonly IPlantService _plantService;
