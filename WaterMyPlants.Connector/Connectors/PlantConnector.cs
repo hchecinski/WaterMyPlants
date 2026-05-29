@@ -12,10 +12,4 @@ public class PlantConnector
 
         _httpClient.BaseAddress = new Uri("https://localhost:5001/api/plants/");
     }
-
-    public async Task<Result<IReadOnlyList<PlantModel>>> GetPlantsAsync()
-    {
-        // tutaj cała logika
-
-    }
 }
