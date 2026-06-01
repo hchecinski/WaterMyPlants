@@ -5,6 +5,18 @@ namespace WaterMyPlants.UI.Services;
 
 public class Mapper : IMapper
 {
+    public CreatePlantDto ToDto(CreatePlantModel model)
+    {
+        var dto = new CreatePlantDto()
+        {
+            Description = model.Description,
+            Localization = model.Localization,
+            Name = model.Name,
+            WaterIntervalDays = model.WaterIntervalDays
+        };
+
+        return dto;
+    }
 
     public PlantListItemModel ToModel(PlantListItemDto dto)
     {

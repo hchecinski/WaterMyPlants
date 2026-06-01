@@ -40,8 +40,7 @@ public partial class PlantListItemViewModel : ObservableObject
     {
         try
         {
-            var dto = await _plantService.GetDetailsAsync(Model.Id);
-            return _mapper.ToModel(dto);
+            return await _plantService.GetDetailsAsync(Model.Id);
         }
         catch (Exception ex)
         {

@@ -11,4 +11,5 @@ public interface IMapper
     NoteModel ToModel(NoteDto note);
     PhotoModel ToModel(PhotoDto photo);
     UpdatePlantDto ToUpdatePlantDto(PlantDetailsModel model);
+    CreatePlantDto ToDto(CreatePlantModel model);
 }

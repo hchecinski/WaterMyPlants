@@ -10,7 +10,6 @@ namespace WaterMyPlants.UI.ViewModels;
 public partial class MainViewModel : ObservableObject
 {
     private readonly IPlantService _plantService;
-    private readonly IMapper _mapper;
     private readonly IPlantViewModelFactory _factory;
     private readonly INavigationService _navigator;
 
@@ -19,10 +18,9 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     ObservableCollection<PlantListItemViewModel> _plants = new();
 
-    public MainViewModel(IPlantService plantService, IMapper mapper, IPlantViewModelFactory plantViewModelFactory, INavigationService navigationService)
+    public MainViewModel(IPlantService plantService, IPlantViewModelFactory plantViewModelFactory, INavigationService navigationService)
     {
         _plantService = plantService;
-        _mapper = mapper;
         _factory = plantViewModelFactory;
         _navigator = navigationService;
 
@@ -39,8 +37,8 @@ public partial class MainViewModel : ObservableObject
     {
         try
         {
-            var dtos = await _plantService.GetSortedAsync();
-            return dtos.Select(_mapper.ToModel).Select(_factory.Create);
+            var items = await _plantService.GetSortedAsync();
+            return items.Select(_factory.Create);
         }
         catch (Exception ex)
         {
@@ -75,7 +73,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task WaterPlant(PlantListItemViewModel model)
     {
-        var result = await Shell.Current.DisplayAlert("Podlewanie", $"Czy na pewno chcesz podlać roślinkę {model.Name}?", "Tak", "Anuluj");
+        var result = await Shell.Current.DisplayAlertAsync("Podlewanie", $"Czy na pewno chcesz podlać roślinkę {model.Name}?", "Tak", "Anuluj");
         if (!result)
         {
             return;

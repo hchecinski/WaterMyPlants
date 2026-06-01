@@ -11,7 +11,8 @@ public partial class PlantDetailsModel : ObservableObject
     public DateTime? CreatedAt { get; set; }
     public DateTime? LastWaterAt { get; set; }
     public DateTime? NextWaterAt { get; set; }
-
+    public int WaterIntervalDays { get; set; }
+    
     public IEnumerable<NoteModel> Notes { get; set; } = Enumerable.Empty<NoteModel>();
     public IEnumerable<PhotoModel> Photos { get; set; } = Enumerable.Empty<PhotoModel>();
 }

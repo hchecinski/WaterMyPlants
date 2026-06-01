@@ -38,7 +38,7 @@ public static class DependencyInjection
         services.AddTransient<INoteFactory, NoteFactory>();
         services.AddTransient<IPhotoFactory, PhotoFactory>();
 
-
+        
         return services;
     }
 }

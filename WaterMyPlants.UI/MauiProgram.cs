@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
 using WaterMyPlants.Application;
 using WaterMyPlants.Connector;
+using WaterMyPlants.Connector.Connectors;
 
 namespace WaterMyPlants.UI;
 public static class MauiProgram
@@ -23,9 +23,11 @@ public static class MauiProgram
 #endif
 
         builder.Services.AddUIServices();
-        builder.Services.AddHttpClient("clientName", client =>
+        builder.Services.AddConnectorsServices();
+
+        builder.Services.AddHttpClient<IPlantConnector, PlantConnector>("clientName", client =>
         {
-            client.BaseAddress = new Uri("http://10.0.2.2:5008/");
+            client.BaseAddress = new Uri("http://10.0.2.2:5000");
             client.Timeout = TimeSpan.FromSeconds(10);
         });
         return builder.Build();

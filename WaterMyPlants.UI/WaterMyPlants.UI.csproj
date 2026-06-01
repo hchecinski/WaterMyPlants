@@ -9,7 +9,7 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-
+    	<JavaSdkDirectory>/usr/lib/jvm/java-21-openjdk-amd64</JavaSdkDirectory>
 		<!-- Display name -->
 		<ApplicationTitle>WaterMyPlants.UI</ApplicationTitle>
 

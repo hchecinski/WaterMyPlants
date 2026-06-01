@@ -1,32 +1,58 @@
-﻿using WaterMyPlants.Shared.Dtos;
+﻿using WaterMyPlants.Connector.Connectors;
+using WaterMyPlants.Shared.Dtos;
+using WaterMyPlants.UI.Models;
 
 namespace WaterMyPlants.UI.Services;
 
 public class PlantService : IPlantService
 {
-    public Task<Guid> AddAsync(CreatePlantDto createPlantDto)
+    IPlantConnector _plantConnector;
+    IMapper _mapper;
+
+    public PlantService(IPlantConnector plantConnector, IMapper mapper)
+    {
+        _plantConnector = plantConnector;
+        _mapper = mapper;
+    }
+
+    public async Task<PlantDetailsModel?> GetDetailsAsync(Guid id)
+    {
+        var plantDetailsDto = await _plantConnector.GetDetailsAsync(id);
+        if(plantDetailsDto == null)
+        {
+            return null;
+        }
+
+        return  _mapper.ToModel(plantDetailsDto);
+    }
+
+    public async Task<IReadOnlyList<PlantListItemModel>> GetSortedAsync()
+    {
+        var plants = await _plantConnector.GetPlantsAsync();
+        if(plants == null || !plants.Any())
+        {
+            return [];
+        }
+
+        return plants.Select(_mapper.ToModel).ToList();
+    }
+    
+    public Task<UpdatePlantModel> GetUpdatablePlantAsync(Guid value)
     {
         throw new NotImplementedException();
     }
 
-    public Task DeleteAsync(Guid id)
+
+    public async Task<Guid> AddAsync(CreatePlantModel plant)
     {
-        throw new NotImplementedException();
+        var dto = _mapper.ToDto(plant);
+        var added =  await _plantConnector.AddPlantAsync(dto);
+        return added?.Id ?? Guid.Empty;
     }
 
-    public Task<PlantDetailsDto> GetDetailsAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<IReadOnlyList<PlantListItemDto>> GetSortedAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<UpdatablePlantDto> GetUpdatablePlantAsync(Guid value)
-    {
-        throw new NotImplementedException();
+        await _plantConnector.DeletePlantAsync(id);
     }
 
     public Task UndoWaterAsync(Guid id, DateTime previousUtc)
@@ -34,7 +60,7 @@ public class PlantService : IPlantService
         throw new NotImplementedException();
     }
 
-    public Task UpdateAsync(UpdatePlantDto plantDto)
+    public Task UpdateAsync(UpdatePlantModel plant)
     {
         throw new NotImplementedException();
     }

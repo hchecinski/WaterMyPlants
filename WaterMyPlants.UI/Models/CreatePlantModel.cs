@@ -1,6 +1,6 @@
-﻿namespace WaterMyPlants.UI.Models;
+namespace WaterMyPlants.UI.Models;
 
-public class UpdatablePlantModel
+public class CreatePlantModel
 {
     public string Name { get; set; } = string.Empty;
     public string? Localization { get; set; }
